@@ -35,7 +35,7 @@
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "uuidv7": "^1.0.2",
-    "valibot": "link:@hookform/resolvers/valibot",
+    "valibot": "1.0.0-beta.9",
     "vaul": "^1.1.2",
     "zod": "^3.24.1"
   },
