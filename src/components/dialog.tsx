@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 import {
   Dialog as ShadcnDialog,
   DialogContent,
@@ -6,28 +6,50 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogFooter,
 } from "./ui/dialog";
+import { Button } from "./ui/button";
+import { Separator } from "./ui/separator";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 type DialogProps = {
   open: boolean;
   title: string;
   onOpenChange: (open: boolean) => void;
   children: React.ReactNode;
-  onClose: () => void;
   trigger?: ReactNode;
+  primaryButtonLabel: string;
+  onPrimaryButtonClick?: () => void;
+  formId?: string;
 };
-export function Dialog({ open, trigger, onOpenChange }: DialogProps) {
+export function Dialog({
+  open,
+  trigger,
+  onOpenChange,
+  children,
+  title,
+  primaryButtonLabel,
+  onPrimaryButtonClick,
+  formId,
+}: PropsWithChildren<DialogProps>) {
   return (
     <ShadcnDialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
-          <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </DialogDescription>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
+        {children}
+        <Separator />
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">閉じる</Button>
+          </DialogClose>
+          <Button onClick={onPrimaryButtonClick} type="submit" form={formId}>
+            {primaryButtonLabel}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </ShadcnDialog>
   );

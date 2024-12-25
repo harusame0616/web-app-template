@@ -1,6 +1,7 @@
 "use client";
 
 import { Dialog } from "@/components/dialog";
+import { Pagination } from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -22,8 +24,7 @@ import {
 import { Edit, Trash } from "lucide-react";
 import { useState } from "react";
 import { User } from "./data/user";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Pagination } from "@/components/pagination";
+import { UserEditDialog } from "./user-edit-dialog";
 
 type UsersTablePresenterProps =
   | {
@@ -40,6 +41,15 @@ type UsersTablePresenterProps =
 export function UsersTablePresenter(props: UsersTablePresenterProps) {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [userId, setUserId] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [editionUser, setEditionUser] = useState({
+    name: "",
+    email: "",
+    userId: "",
+  });
+
   const page = props.page;
   const totalPage = props.skeleton ? 1 : props.totalPage;
   const searchParams = props.skeleton ? {} : props.searchParams;
@@ -90,7 +100,10 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                       <DropdownMenuItem
-                        onClick={() => setEditDialogOpen(!editDialogOpen)}
+                        onClick={() => {
+                          setEditionUser({ name, email, userId });
+                          setEditDialogOpen(!editDialogOpen);
+                        }}
                       >
                         <Edit />
                         編集
@@ -122,22 +135,16 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
         />
       </div>
 
-      <Dialog
-        title="Are you absolutely sure?"
-        onClose={() => {}}
+      <UserEditDialog
+        title="ユーザー編集"
         onOpenChange={setEditDialogOpen}
         open={editDialogOpen}
-      >
-        edit
-      </Dialog>
-      <Dialog
-        title="Are you absolutely sure?"
-        onClose={() => {}}
-        onOpenChange={setDeleteDialogOpen}
-        open={deleteDialogOpen}
-      >
-        delete
-      </Dialog>
+        primaryButtonLabel="保存"
+        onPrimaryButtonClick={() => {
+          setEditDialogOpen(false);
+        }}
+        {...editionUser}
+      />
     </div>
   );
 }

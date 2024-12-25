@@ -45,23 +45,34 @@ export function Form<
   onSubmit,
   submitButtonLabel,
   errorMessage,
+  noSubmitButton,
+  formId,
   ...props
 }: PropsWithChildren<
   FormProviderProps<TFieldValues, TContext, TTransformedValues> & {
-    onSubmit: FormEventHandler<HTMLFormElement>;
+    onSubmit?: FormEventHandler<HTMLFormElement>;
     actionChildren?: React.ReactNode;
-    submitButtonLabel: string;
+    submitButtonLabel?: string;
     submitDisabled?: boolean;
     errorMessage?: string;
+    noSubmitButton?: boolean;
+    formId?: string;
   }
 >) {
   return (
     <ShadcnForm {...props}>
-      <form className="flex flex-col gap-4" onSubmit={onSubmit} noValidate>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={onSubmit}
+        noValidate
+        id={formId}
+      >
         {children}
-        <SubmitButton className="mt-4" loading={props.formState.isSubmitting}>
-          {submitButtonLabel}
-        </SubmitButton>
+        {!noSubmitButton && (
+          <SubmitButton className="mt-4" loading={props.formState.isSubmitting}>
+            {submitButtonLabel}
+          </SubmitButton>
+        )}
         {errorMessage && (
           <div className="text-destructive text-sm">{errorMessage}</div>
         )}
