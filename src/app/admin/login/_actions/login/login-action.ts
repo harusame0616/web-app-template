@@ -7,10 +7,6 @@ import { login } from "./login";
 import { Failure } from "@/lib/result";
 
 export const loginAction = createAction(
-  v.object({
-    email: v.pipe(v.string(), v.email()),
-    password: v.pipe(v.string(), v.minLength(6), v.maxLength(64)),
-  }),
   async (loginParams): Promise<Failure | never> => {
     const result = await login(loginParams);
 
@@ -19,5 +15,11 @@ export const loginAction = createAction(
     }
 
     redirect("/admin");
+  },
+  {
+    inputSchema: v.object({
+      email: v.pipe(v.string(), v.email()),
+      password: v.pipe(v.string(), v.minLength(6), v.maxLength(64)),
+    }),
   }
 );

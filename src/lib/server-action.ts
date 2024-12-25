@@ -4,7 +4,14 @@ import { fail, Result } from "./result";
 export function createAction<
   InputSchema extends v.BaseSchema<any, any, any>,
   Handler extends (inputs: v.InferInput<InputSchema>) => Promise<any>
->(inputSchema: InputSchema, handler: Handler) {
+>(
+  handler: Handler,
+  {
+    inputSchema,
+  }: {
+    inputSchema: InputSchema;
+  }
+) {
   return async function action(
     input: v.InferOutput<InputSchema>
   ): Promise<Result<ReturnType<Handler>>> {

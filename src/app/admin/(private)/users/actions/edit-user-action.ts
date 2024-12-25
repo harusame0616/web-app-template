@@ -8,11 +8,6 @@ import { fail, succeed } from "@/lib/result";
 import { createAction } from "@/lib/server-action";
 
 export const editUserAction = createAction(
-  v.object({
-    userId: v.pipe(v.string(), v.minLength(1), v.uuid()),
-    name: v.pipe(v.string(), v.minLength(1), v.maxLength(64)),
-    email: v.pipe(v.string(), v.minLength(1), v.email(), v.maxLength(255)),
-  }),
   async (params) => {
     const result = await editUser(params);
 
@@ -21,6 +16,13 @@ export const editUserAction = createAction(
     }
 
     return result;
+  },
+  {
+    inputSchema: v.object({
+      userId: v.pipe(v.string(), v.minLength(1), v.uuid()),
+      name: v.pipe(v.string(), v.minLength(1), v.maxLength(64)),
+      email: v.pipe(v.string(), v.minLength(1), v.email(), v.maxLength(255)),
+    }),
   }
 );
 
