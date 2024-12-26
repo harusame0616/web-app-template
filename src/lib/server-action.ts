@@ -1,15 +1,21 @@
 import * as v from "valibot";
 import { fail, Result } from "./result";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export function createAction<
   InputSchema extends v.BaseSchema<any, any, any>,
-  Handler extends (inputs: v.InferInput<InputSchema>) => Promise<any>
+  Handler extends (inputs: v.InferInput<InputSchema>) => Promise<Result<any>>
 >(
   handler: Handler,
   {
     inputSchema,
+    revalidatePaths,
+    redirectTo,
   }: {
     inputSchema: InputSchema;
+    revalidatePaths?: string[];
+    redirectTo?: string;
   }
 ) {
   return async function action(
@@ -22,6 +28,18 @@ export function createAction<
       return fail(Object.values<string>(errors)[0]);
     }
 
-    return handler(parsedParams.output);
+    const result = await handler(parsedParams.output);
+
+    if (result.success && revalidatePaths?.length) {
+      revalidatePaths.forEach((path) => {
+        revalidatePath(path);
+      });
+    }
+
+    if (result.success && redirectTo) {
+      redirect(redirectTo);
+    }
+
+    return result;
   };
 }
