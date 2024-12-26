@@ -41,12 +41,11 @@ type UsersTablePresenterProps =
       page: number;
     };
 export function UsersTablePresenter(props: UsersTablePresenterProps) {
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [editionUser, setEditionUser] = useState({
-    name: "",
-    email: "",
-    userId: "",
-  });
+  const [editionUser, setEditionUser] = useState<{
+    name: string;
+    email: string;
+    userId: string;
+  }>();
   const [deletionUser, setDeletionUser] = useState<{
     name: string;
     email: string;
@@ -103,18 +102,13 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                       <DropdownMenuItem
-                        onClick={() => {
-                          setEditionUser({ name, email, userId });
-                          setEditDialogOpen(!editDialogOpen);
-                        }}
+                        onClick={() => setEditionUser({ name, email, userId })}
                       >
                         <Edit />
                         編集
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        onClick={() => {
-                          setDeletionUser({ name, email, userId });
-                        }}
+                        onClick={() => setDeletionUser({ name, email, userId })}
                       >
                         <Trash />
                         削除
@@ -140,16 +134,19 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
         />
       </div>
 
-      <UserEditDialog
-        title="ユーザー編集"
-        onOpenChange={setEditDialogOpen}
-        open={editDialogOpen}
-        primaryButtonLabel="保存"
-        onPrimaryButtonClick={() => {
-          setEditDialogOpen(false);
-        }}
-        {...editionUser}
-      />
+      {!!editionUser && (
+        <UserEditDialog
+          title="ユーザー編集"
+          onOpenChange={(open) => {
+            if (!open) {
+              setEditionUser(undefined);
+            }
+          }}
+          open
+          primaryButtonLabel="保存"
+          {...editionUser}
+        />
+      )}
       <AlertDialog
         title="ユーザー削除"
         description={`ユーザー「${deletionUser?.name}（${deletionUser?.email}）」を削除します。よろしいですか？`}

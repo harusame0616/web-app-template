@@ -81,7 +81,7 @@ export function UserEditDialog({
           name="email"
           render={({ field }) => (
             <FormItem
-              label="メールアドレスを入力してください"
+              label="メールアドレス"
               description="メールアドレスを入力してください"
             >
               <Input
