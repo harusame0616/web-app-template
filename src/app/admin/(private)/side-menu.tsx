@@ -30,6 +30,8 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import UserImage from "./user.png";
+import { createClient } from "@/lib/supabase/server";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const items = [
   {
@@ -39,8 +41,27 @@ const items = [
   },
 ];
 
-export function SideMenu() {
-  const { name, email } = { name: "山田 太郎", email: "y.taro@example.com" };
+export async function SideMenuContainer() {
+  const supabaseClient = await createClient();
+  const getUserResult = await supabaseClient.auth.getUser();
+  if (getUserResult.error || !getUserResult.data) {
+    throw new Error("Not authenticated");
+  }
+  const name = getUserResult.data.user.user_metadata.name;
+  const email = getUserResult.data.user.email!;
+
+  return <SideMenuPresenter name={name} email={email} />;
+}
+
+export function SideMenuPresenter(
+  props:
+    | {
+        skeleton?: false;
+        email: string;
+        name: string;
+      }
+    | { skeleton: true }
+) {
   return (
     <Sidebar>
       <SidebarHeader>Admin</SidebarHeader>
@@ -67,13 +88,21 @@ export function SideMenu() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <div className="grid grid-cols-[1fr_auto] items-center">
-              <UserMiniProfile name={name} email={email} />
+              {props.skeleton ? (
+                <UserMiniProfile skeleton />
+              ) : (
+                <UserMiniProfile name={props.name} email={props.email} />
+              )}
               <ChevronsUpDownIcon />
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="mb-2 ml-1 max-w-64" side="right">
             <DropdownMenuLabel>
-              <UserMiniProfile name={name} email={email} />
+              {props.skeleton ? (
+                <UserMiniProfile skeleton />
+              ) : (
+                <UserMiniProfile name={props.name} email={props.email} />
+              )}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
@@ -96,20 +125,33 @@ export function SideMenu() {
   );
 }
 
-type UserMiniProfileProps = {
-  name: string;
-  email: string;
-};
-function UserMiniProfile({ name, email }: UserMiniProfileProps) {
+type UserMiniProfileProps =
+  | {
+      skeleton?: false;
+      name: string;
+      email: string;
+    }
+  | { skeleton: true };
+function UserMiniProfile(props: UserMiniProfileProps) {
   return (
     <div className="grid grid-cols-[auto_1fr] gap-2 items-center">
       <Avatar>
         <Image src={UserImage} alt={""} />
-        <AvatarFallback>{name.at(1)}</AvatarFallback>
+        <AvatarFallback>
+          {props.skeleton ? "" : props.name.at(0)}
+        </AvatarFallback>
       </Avatar>
       <div className="grid grid-rows-2 font-normal">
-        <div className="truncate ">{name}</div>
-        <div className="truncate text-muted-foreground">{email}</div>
+        <div className="truncate ">
+          {props.skeleton ? <Skeleton className="h-4 w-12 my-1" /> : props.name}
+        </div>
+        <div className="truncate text-muted-foreground">
+          {props.skeleton ? (
+            <Skeleton className="h-4 w-24 my-1" />
+          ) : (
+            props.email
+          )}
+        </div>
       </div>
     </div>
   );

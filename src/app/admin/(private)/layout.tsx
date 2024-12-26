@@ -1,6 +1,6 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { PropsWithChildren, ReactNode } from "react";
-import { SideMenu } from "./side-menu";
+import { PropsWithChildren, ReactNode, Suspense } from "react";
+import { SideMenuContainer, SideMenuPresenter } from "./side-menu";
 
 export default function Layout({
   children,
@@ -8,7 +8,9 @@ export default function Layout({
 }: PropsWithChildren<{ title?: ReactNode }>) {
   return (
     <SidebarProvider className="flex">
-      <SideMenu />
+      <Suspense fallback={<SideMenuPresenter skeleton/>}>
+        <SideMenuContainer />
+      </Suspense>
       <main className="grid grid-rows-[auto_1fr] flex-grow">
         <div className="grid grid-cols-[auto_1fr] items-center">
           <SidebarTrigger />
