@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/table";
 import { Edit, Trash } from "lucide-react";
 import { useState } from "react";
-import { User } from "./data/user";
+import { User } from "./_data/user";
 import { UserEditDialog } from "./user-edit-dialog";
 
 type UsersTablePresenterProps =

@@ -6,7 +6,7 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import { ComponentProps, useEffect, useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
-import { editUserAction } from "./actions/edit-user-action";
+import { editUserAction } from "./_actions/edit-user-action";
 
 const formSchema = v.object({
   name: v.pipe(v.string(), v.minLength(1)),
