@@ -25,6 +25,8 @@ import { Edit, Trash } from "lucide-react";
 import { useState } from "react";
 import { User } from "./_data/user";
 import { UserEditDialog } from "./user-edit-dialog";
+import { AlertDialog } from "@/components/alert-dialog";
+import { deleteUserAction } from "./_actions/delete-user-actions";
 
 type UsersTablePresenterProps =
   | {
@@ -40,15 +42,16 @@ type UsersTablePresenterProps =
     };
 export function UsersTablePresenter(props: UsersTablePresenterProps) {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [userId, setUserId] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
   const [editionUser, setEditionUser] = useState({
     name: "",
     email: "",
     userId: "",
   });
+  const [deletionUser, setDeletionUser] = useState<{
+    name: string;
+    email: string;
+    userId: string;
+  }>();
 
   const page = props.page;
   const totalPage = props.skeleton ? 1 : props.totalPage;
@@ -109,7 +112,9 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
                         編集
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        onClick={() => setDeleteDialogOpen(!deleteDialogOpen)}
+                        onClick={() => {
+                          setDeletionUser({ name, email, userId });
+                        }}
                       >
                         <Trash />
                         削除
@@ -144,6 +149,23 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
           setEditDialogOpen(false);
         }}
         {...editionUser}
+      />
+      <AlertDialog
+        title="ユーザー削除"
+        description={`ユーザー「${deletionUser?.name}（${deletionUser?.email}）」を削除します。よろしいですか？`}
+        primaryButtonLabel="削除"
+        triggerLabel="削除"
+        open={!!deletionUser}
+        onPrimaryButtonClick={async () => {
+          if (deletionUser) {
+            await deleteUserAction(deletionUser);
+          }
+        }}
+        onOpenChange={(open) => {
+          if (!open) {
+            setDeletionUser(undefined);
+          }
+        }}
       />
     </div>
   );
