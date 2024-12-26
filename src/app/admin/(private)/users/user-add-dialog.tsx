@@ -4,7 +4,7 @@ import { Dialog } from "@/components/dialog";
 import { Button } from "@/components/ui/button";
 import { UserPlus } from "lucide-react";
 import { useId, useState } from "react";
-import { addUserAction } from "./_actions/add-user-action";
+import { addUserAction } from "./_actions";
 import { UserInputForm } from "./user-input-form";
 
 export function UserAddDialog() {

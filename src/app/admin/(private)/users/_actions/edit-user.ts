@@ -1,16 +1,23 @@
-import { fail, succeed } from "@/lib/result";
+import { fail, Result, succeed } from "@/lib/result";
 import { createClient } from "@/lib/supabase/server";
 
 type EditUserParams = {
   userId: string;
   name: string;
   email: string;
+  password: string;
 };
-export async function editUser({ userId, name, email }: EditUserParams) {
+export async function editUser({
+  userId,
+  name,
+  email,
+  password,
+}: EditUserParams): Promise<Result<undefined>> {
   const supabase = await createClient();
 
   const result = await supabase.auth.admin.updateUserById(userId, {
     user_metadata: { name },
+    password: password || undefined,
     email,
     email_confirm: true,
   });

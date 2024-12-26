@@ -3,15 +3,9 @@ import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Result } from "@/lib/result";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
-
-const formSchema = v.object({
-  name: v.pipe(v.string(), v.minLength(1)),
-  email: v.pipe(v.string(), v.minLength(1), v.email()),
-  password: v.pipe(v.string(), v.minLength(6)),
-});
 
 type UserInputFormProps = {
   formId: string;
@@ -21,14 +15,29 @@ type UserInputFormProps = {
     email: string;
     password: string;
   }) => Promise<Result>;
+  user?: { name: string; email: string };
 };
 export function UserInputForm({
   onSuccess,
   action,
   formId,
+  user,
 }: UserInputFormProps) {
+  const formSchema = v.object({
+    name: v.pipe(v.string(), v.minLength(1), v.maxLength(64)),
+    email: v.pipe(v.string(), v.minLength(1), v.maxLength(255), v.email()),
+    password: v.union([
+      v.pipe(v.string(), v.minLength(8), v.maxLength(255)),
+      ...(user ? [v.pipe(v.string(), v.length(0))] : []),
+    ]),
+  });
+
   const form = useForm<v.InferInput<typeof formSchema>>({
-    defaultValues: { name: "", email: "", password: "" },
+    defaultValues: {
+      name: user?.name || "",
+      email: user?.email || "",
+      password: "",
+    },
     resolver: valibotResolver(formSchema),
   });
 
@@ -40,7 +49,7 @@ export function UserInputForm({
     const result = await action({
       name: params.name,
       email: params.email,
-      password: params.password, // 追加
+      password: params.password,
     });
 
     if (!result.success) {
@@ -49,6 +58,14 @@ export function UserInputForm({
       onSuccess();
     }
   });
+
+  useEffect(() => {
+    form.reset({
+      name: user?.name || "",
+      email: user?.email || "",
+      password: "",
+    });
+  }, [user]);
 
   return (
     <Form
@@ -62,7 +79,7 @@ export function UserInputForm({
         control={form.control}
         name="name"
         render={({ field }) => (
-          <FormItem label="名前" description="名前を入力してください">
+          <FormItem label="名前" description="名前を入力してください" required>
             <Input
               {...field}
               autoComplete="name"
@@ -79,6 +96,7 @@ export function UserInputForm({
           <FormItem
             label="メールアドレス"
             description="メールアドレスを入力してください"
+            required
           >
             <Input
               {...field}
@@ -96,7 +114,10 @@ export function UserInputForm({
         render={({ field }) => (
           <FormItem
             label="パスワード"
-            description="パスワードを入力してください"
+            description={`パスワードを入力してください。${
+              user ? "入力済みの場合のみ更新します" : ""
+            }`}
+            required={!user}
           >
             <Input
               {...field}

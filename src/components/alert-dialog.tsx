@@ -15,7 +15,7 @@ type Props = {
   title: string;
   description: string;
   primaryButtonLabel: string;
-  triggerLabel: string;
+  triggerLabel?: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onPrimaryButtonClick?: () => Promise<void>;
@@ -31,7 +31,7 @@ export function AlertDialog({
 }: Props) {
   return (
     <ShadcnAlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogTrigger>{triggerLabel}</AlertDialogTrigger>
+      {triggerLabel && <AlertDialogTrigger>{triggerLabel}</AlertDialogTrigger>}
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>

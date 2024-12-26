@@ -1,6 +1,6 @@
 "use client";
 
-import { Dialog } from "@/components/dialog";
+import { AlertDialog } from "@/components/alert-dialog";
 import { Pagination } from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,10 +23,9 @@ import {
 } from "@/components/ui/table";
 import { Edit, Trash } from "lucide-react";
 import { useState } from "react";
+import { deleteUserAction } from "./_actions";
 import { User } from "./_data/user";
 import { UserEditDialog } from "./user-edit-dialog";
-import { AlertDialog } from "@/components/alert-dialog";
-import { deleteUserAction } from "./_actions/delete-user-actions";
 
 type UsersTablePresenterProps =
   | {
@@ -151,7 +150,6 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
         title="ユーザー削除"
         description={`ユーザー「${deletionUser?.name}（${deletionUser?.email}）」を削除します。よろしいですか？`}
         primaryButtonLabel="削除"
-        triggerLabel="削除"
         open={!!deletionUser}
         onPrimaryButtonClick={async () => {
           if (deletionUser) {
