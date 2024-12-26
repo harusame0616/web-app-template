@@ -1,12 +1,14 @@
-import { fail, succeed } from "@/lib/result";
+import { fail, Result, succeed } from "@/lib/result";
 import { createClient } from "@/lib/supabase/server";
-import { uuidv7 } from "uuidv7";
 
 type AddUserParams = {
   name: string;
   email: string;
 };
-export async function addUser({ name, email }: AddUserParams) {
+export async function addUser({
+  name,
+  email,
+}: AddUserParams): Promise<Result<undefined>> {
   const supabase = await createClient();
 
   const result = await supabase.auth.admin.createUser({

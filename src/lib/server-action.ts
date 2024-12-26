@@ -1,5 +1,5 @@
 import * as v from "valibot";
-import { fail, Result } from "./result";
+import { fail, Failure, Result } from "./result";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -20,7 +20,7 @@ export function createAction<
 ) {
   return async function action(
     input: v.InferOutput<InputSchema>
-  ): Promise<Result<ReturnType<Handler>>> {
+  ): Promise<Awaited<ReturnType<Handler>> | Failure> {
     const parsedParams = v.safeParse(inputSchema, input);
     if (!parsedParams.success) {
       const errors = v.flatten<InputSchema>(parsedParams.issues).nested || {};
@@ -28,7 +28,9 @@ export function createAction<
       return fail(Object.values<string>(errors)[0]);
     }
 
-    const result = await handler(parsedParams.output);
+    const result = (await handler(parsedParams.output)) as Awaited<
+      ReturnType<Handler>
+    >;
 
     if (result.success && revalidatePaths?.length) {
       revalidatePaths.forEach((path) => {
