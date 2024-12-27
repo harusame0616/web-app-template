@@ -27,11 +27,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { createClient } from "@/lib/supabase/server";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import UserImage from "./user.png";
-import { createClient } from "@/lib/supabase/server";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const items = [
   {
@@ -44,9 +45,11 @@ const items = [
 export async function SideMenuContainer() {
   const supabaseClient = await createClient();
   const getUserResult = await supabaseClient.auth.getUser();
+  console.log(getUserResult);
   if (getUserResult.error || !getUserResult.data) {
-    throw new Error("Not authenticated");
+    redirect("/admin/login");
   }
+
   const name = getUserResult.data.user.user_metadata.name;
   const email = getUserResult.data.user.email!;
 
@@ -114,10 +117,12 @@ export function SideMenuPresenter(
               メールアドレス更新
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOutIcon />
-              ログアウト
-            </DropdownMenuItem>
+            <Link href="/admin/logout">
+              <DropdownMenuItem>
+                <LogOutIcon />
+                ログアウト
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarFooter>
