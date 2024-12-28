@@ -7,10 +7,7 @@ import { useForm } from "@/lib/use-form";
 import Link from "next/link";
 import * as v from "valibot";
 import { loginAction } from "./_actions";
-
-const formSchema = v.object({
-  email: v.pipe(v.string(), v.minLength(1), v.maxLength(255), v.email()),
-});
+import { emailSchema, passwordSchema } from "@/domains/user/schema";
 
 export function LoginForm() {
   const form = useForm({
@@ -19,8 +16,8 @@ export function LoginForm() {
       password: "",
     },
     schema: v.object({
-      email: v.pipe(v.string(), v.minLength(1), v.maxLength(255), v.email()),
-      password: v.pipe(v.string(), v.minLength(6), v.maxLength(255)),
+      email: emailSchema,
+      password: passwordSchema,
     }),
     onSubmit: async (params, setErrorMessage) => {
       const result = await loginAction(params);

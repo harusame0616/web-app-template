@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "@/lib/use-form";
 import * as v from "valibot";
 import { invitationAction } from "./_actions";
+import { emailSchema } from "@/domains/user/schema";
 
 export function InvitationForm() {
   const form = useForm({
@@ -17,7 +18,7 @@ export function InvitationForm() {
       }
     },
     schema: v.object({
-      email: v.pipe(v.string(), v.minLength(1), v.maxLength(255), v.email()),
+      email: emailSchema,
     }),
   });
 

@@ -6,12 +6,13 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "@/lib/use-form";
 import * as v from "valibot";
 import { resetAction } from "./_actions";
+import { emailSchema } from "@/domains/user/schema";
 
 export function ResetForm() {
   const form = useForm({
     defaultValues: { email: "" },
     schema: v.object({
-      email: v.pipe(v.string(), v.minLength(1), v.maxLength(255), v.email()),
+      email: emailSchema,
     }),
     onSubmit: async (params, setErrorMessage) => {
       const result = await resetAction(params);

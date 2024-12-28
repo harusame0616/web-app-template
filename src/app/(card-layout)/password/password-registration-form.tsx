@@ -3,6 +3,7 @@
 import { Form, FormItem } from "@/components/form/form";
 import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { passwordSchema } from "@/domains/user/schema";
 import { useForm } from "@/lib/use-form";
 import { createBrowserClient } from "@supabase/ssr";
 import { useRouter } from "next/navigation";
@@ -16,7 +17,7 @@ export function PasswordRegistrationForm() {
   const form = useForm({
     defaultValues: { password: "" },
     schema: v.object({
-      password: v.pipe(v.string(), v.minLength(8), v.maxLength(255)),
+      password: passwordSchema,
     }),
     onSubmit: async ({ password }) => {
       const searchParams = new URLSearchParams(

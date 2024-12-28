@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import * as v from "valibot";
 import { User } from "./_data/user";
 import { Role } from "./role";
+import { emailSchema, nameSchema, passwordSchema } from "@/domains/user/schema";
 
 type UserInputFormProps = {
   formId: string;
@@ -34,10 +35,10 @@ export function UserInputForm({
       role: user?.role || Role.Viewer.value,
     },
     schema: v.object({
-      name: v.pipe(v.string(), v.minLength(1), v.maxLength(64)),
-      email: v.pipe(v.string(), v.minLength(1), v.maxLength(255), v.email()),
+      name: nameSchema,
+      email: emailSchema,
       password: v.union([
-        v.pipe(v.string(), v.minLength(8), v.maxLength(255)),
+        passwordSchema,
         ...(user ? [v.pipe(v.string(), v.length(0))] : []),
       ]),
       role: v.picklist(Object.values(Role).map((role) => role.value)),

@@ -3,11 +3,12 @@
 import { createAction } from "@/lib/server-action";
 import * as v from "valibot";
 import { login } from "./login";
+import { emailSchema, passwordSchema } from "@/domains/user/schema";
 
 export const loginAction = createAction(login, {
   inputSchema: v.object({
-    email: v.pipe(v.string(), v.email()),
-    password: v.pipe(v.string(), v.minLength(6), v.maxLength(64)),
+    email: emailSchema,
+    password: passwordSchema,
   }),
   redirectTo: "/admin",
 });
