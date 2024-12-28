@@ -3,35 +3,26 @@
 import { Form, FormItem } from "@/components/form/form";
 import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm } from "@/lib/use-form";
 import * as v from "valibot";
 import { invitationAction } from "./_actions";
 
-const formSchema = v.object({
-  email: v.pipe(v.string(), v.minLength(1), v.maxLength(255), v.email()),
-});
 export function InvitationForm() {
-  const [error, setError] = useState("");
-  const form = useForm<v.InferInput<typeof formSchema>>({
+  const form = useForm({
     defaultValues: { email: "" },
-    resolver: valibotResolver(formSchema),
-  });
-  const handleSubmit = form.handleSubmit(async (params) => {
-    const result = await invitationAction(params);
-    if (!result.success) {
-      setError(result.message);
-    }
+    onSubmit: async (params, setErrorMessage) => {
+      const result = await invitationAction(params);
+      if (!result.success) {
+        setErrorMessage(result.message);
+      }
+    },
+    schema: v.object({
+      email: v.pipe(v.string(), v.minLength(1), v.maxLength(255), v.email()),
+    }),
   });
 
   return (
-    <Form
-      {...form}
-      onSubmit={handleSubmit}
-      submitButtonLabel="登録メール送信"
-      errorMessage={error}
-    >
+    <Form {...form} submitButtonLabel="登録メール送信">
       <FormField
         control={form.control}
         name="email"

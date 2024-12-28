@@ -3,9 +3,8 @@ import { FormSelect } from "@/components/form/form-select";
 import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Result } from "@/lib/result";
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm } from "@/lib/use-form";
+import { useEffect } from "react";
 import * as v from "valibot";
 import { User } from "./_data/user";
 import { Role } from "./role";
@@ -27,38 +26,33 @@ export function UserInputForm({
   formId,
   user,
 }: UserInputFormProps) {
-  const formSchema = v.object({
-    name: v.pipe(v.string(), v.minLength(1), v.maxLength(64)),
-    email: v.pipe(v.string(), v.minLength(1), v.maxLength(255), v.email()),
-    password: v.union([
-      v.pipe(v.string(), v.minLength(8), v.maxLength(255)),
-      ...(user ? [v.pipe(v.string(), v.length(0))] : []),
-    ]),
-    role: v.picklist(Object.values(Role).map((role) => role.value)),
-  });
-
-  const form = useForm<v.InferInput<typeof formSchema>>({
+  const form = useForm({
     defaultValues: {
       name: user?.name || "",
       email: user?.email || "",
       password: "",
       role: user?.role || Role.Viewer.value,
     },
-    resolver: valibotResolver(formSchema),
-  });
+    schema: v.object({
+      name: v.pipe(v.string(), v.minLength(1), v.maxLength(64)),
+      email: v.pipe(v.string(), v.minLength(1), v.maxLength(255), v.email()),
+      password: v.union([
+        v.pipe(v.string(), v.minLength(8), v.maxLength(255)),
+        ...(user ? [v.pipe(v.string(), v.length(0))] : []),
+      ]),
+      role: v.picklist(Object.values(Role).map((role) => role.value)),
+    }),
+    onSubmit: async (params, setErrorMessage) => {
+      setErrorMessage("");
 
-  const [error, setError] = useState("");
+      const result = await action(params);
 
-  const handleSubmit = form.handleSubmit(async (params) => {
-    setError("");
-
-    const result = await action(params);
-
-    if (!result.success) {
-      setError(result.message);
-    } else {
-      onSuccess();
-    }
+      if (!result.success) {
+        setErrorMessage(result.message);
+      } else {
+        onSuccess();
+      }
+    },
   });
 
   useEffect(() => {
@@ -70,13 +64,7 @@ export function UserInputForm({
   }, [user]);
 
   return (
-    <Form
-      {...form}
-      noSubmitButton
-      errorMessage={error}
-      onSubmit={handleSubmit}
-      formId={formId}
-    >
+    <Form {...form} noSubmitButton formId={formId}>
       <FormField
         control={form.control}
         name="name"

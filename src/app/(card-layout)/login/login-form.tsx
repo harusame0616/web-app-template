@@ -3,42 +3,35 @@
 import { Form, FormItem } from "@/components/form/form";
 import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useForm } from "@/lib/use-form";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
 import * as v from "valibot";
 import { loginAction } from "./_actions";
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useState } from "react";
 
 const formSchema = v.object({
   email: v.pipe(v.string(), v.minLength(1), v.maxLength(255), v.email()),
-  password: v.pipe(v.string(), v.minLength(6), v.maxLength(255)),
 });
 
 export function LoginForm() {
-  const [error, setError] = useState("");
-  const form = useForm<v.InferInput<typeof formSchema>>({
+  const form = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
-    resolver: valibotResolver(formSchema),
-  });
-
-  const handleSubmit = form.handleSubmit(async (params) => {
-    const result = await loginAction(params);
-    if (!result.success) {
-      setError(result.message);
-    }
+    schema: v.object({
+      email: v.pipe(v.string(), v.minLength(1), v.maxLength(255), v.email()),
+      password: v.pipe(v.string(), v.minLength(6), v.maxLength(255)),
+    }),
+    onSubmit: async (params, setErrorMessage) => {
+      const result = await loginAction(params);
+      if (!result.success) {
+        setErrorMessage(result.message);
+      }
+    },
   });
 
   return (
-    <Form
-      {...form}
-      onSubmit={handleSubmit}
-      submitButtonLabel="ログイン"
-      errorMessage={error}
-    >
+    <Form {...form} submitButtonLabel="ログイン">
       <FormField
         control={form.control}
         name="email"
