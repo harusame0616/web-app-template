@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { ResetCard } from "./reset-card";
+import { Metadata } from "next";
 
-export const maxDuration = 60;
+export const metadata: Metadata = {
+  title: "パスワードリセット",
+};
 
 export default function Page() {
   return (

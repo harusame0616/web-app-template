@@ -23,12 +23,15 @@ export function InvitationForm() {
   });
 
   return (
-    <Form {...form} submitButtonLabel="登録メール送信">
+    <Form {...form} submitButtonLabel="仮登録メール送信">
       <FormField
         control={form.control}
         name="email"
         render={({ field }) => (
-          <FormItem label="メールアドレス">
+          <FormItem
+            label="メールアドレス"
+            description="仮登録メールを送信するメールアドレスを入力してください。"
+          >
             <Input
               {...field}
               autoComplete="email"

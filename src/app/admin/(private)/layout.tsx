@@ -1,6 +1,14 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { PropsWithChildren, ReactNode, Suspense } from "react";
 import { SideMenuContainer, SideMenuPresenter } from "./side-menu";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: {
+    template: `%s | ${process.env.NEXT_PUBLIC_SERVICE_NAME}（Admin）`,
+    default: `管理画面 ${process.env.NEXT_PUBLIC_SERVICE_NAME}`,
+  },
+};
 
 export default function Layout({
   children,
@@ -8,7 +16,7 @@ export default function Layout({
 }: PropsWithChildren<{ title?: ReactNode }>) {
   return (
     <SidebarProvider className="flex">
-      <Suspense fallback={<SideMenuPresenter skeleton/>}>
+      <Suspense fallback={<SideMenuPresenter skeleton />}>
         <SideMenuContainer />
       </Suspense>
       <main className="grid grid-rows-[auto_1fr] flex-grow">

@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { InvitationCard } from "./invitation-card";
+import { Metadata } from "next";
 
-export const maxDuration = 60;
+export const metadata: Metadata = {
+  title: "ユーザー登録",
+};
 
 export default function Page() {
   return (

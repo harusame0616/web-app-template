@@ -1,5 +1,10 @@
 import * as v from "valibot";
 import { UsersPage } from "./user-page";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ユーザー一覧",
+};
 
 const searchParamsSchema = v.object({
   page: v.optional(v.pipe(v.string(), v.transform(Number)), () => "1"),
