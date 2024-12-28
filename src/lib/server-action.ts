@@ -4,7 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export function createAction<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   InputSchema extends v.BaseSchema<any, any, any>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Handler extends (inputs: v.InferInput<InputSchema>) => Promise<Result<any>>
 >(
   handler: Handler,

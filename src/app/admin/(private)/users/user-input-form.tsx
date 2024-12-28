@@ -62,7 +62,7 @@ export function UserInputForm({
       email: user?.email || "",
       password: "",
     });
-  }, [user]);
+  }, [form, user]);
 
   return (
     <Form {...form} noSubmitButton formId={formId}>

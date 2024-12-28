@@ -1,4 +1,4 @@
-import { Link, SendIcon } from "lucide-react";
+import { SendIcon } from "lucide-react";
 
 type Props = {
   title: string;

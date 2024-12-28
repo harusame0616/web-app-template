@@ -7,19 +7,17 @@ import { passwordSchema } from "@/domains/user/schema";
 import { useForm } from "@/lib/use-form";
 import { createBrowserClient } from "@supabase/ssr";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import * as v from "valibot";
 
 export function PasswordRegistrationForm() {
   const router = useRouter();
-  const [message, setMessage] = useState("");
 
   const form = useForm({
     defaultValues: { password: "" },
     schema: v.object({
       password: passwordSchema,
     }),
-    onSubmit: async ({ password }) => {
+    onSubmit: async ({ password }, setErrorMessage) => {
       const searchParams = new URLSearchParams(
         window.location.hash.substring(1)
       );
@@ -39,7 +37,7 @@ export function PasswordRegistrationForm() {
         password,
       });
       if (result.error) {
-        setMessage(result.error.message);
+        setErrorMessage(result.error.message);
         return;
       }
 

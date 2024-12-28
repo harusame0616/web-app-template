@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { DefaultValues, useForm as useFormRhf } from "react-hook-form";
 import * as v from "valibot";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useForm<Schema extends v.ObjectSchema<any, any>>({
   schema,
   defaultValues,

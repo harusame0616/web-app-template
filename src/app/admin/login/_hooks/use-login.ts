@@ -6,7 +6,7 @@ export function useLogin() {
 
   function login(params: { email: string; password: string }) {
     startTransition(async () => {
-      const result = await loginAction(params);
+      await loginAction(params);
     });
   }
 

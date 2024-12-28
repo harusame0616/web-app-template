@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { LoginCard } from "./login/login-card";
 import { PropsWithChildren } from "react";
 
 export default function Layout({ children }: PropsWithChildren) {

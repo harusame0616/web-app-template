@@ -1,4 +1,3 @@
-import { Pagination } from "@/components/pagination";
 import { getUsers } from "./_data/user";
 import { UsersTablePresenter } from "./users-table-presenter";
 
