@@ -1,4 +1,5 @@
 import { Form, FormItem } from "@/components/form/form";
+import { FormSelect } from "@/components/form/form-select";
 import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Result } from "@/lib/result";
@@ -6,6 +7,8 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
+import { User } from "./_data/user";
+import { Role } from "./role";
 
 type UserInputFormProps = {
   formId: string;
@@ -14,8 +17,9 @@ type UserInputFormProps = {
     name: string;
     email: string;
     password: string;
+    role: Role;
   }) => Promise<Result>;
-  user?: { name: string; email: string };
+  user?: User;
 };
 export function UserInputForm({
   onSuccess,
@@ -30,6 +34,7 @@ export function UserInputForm({
       v.pipe(v.string(), v.minLength(8), v.maxLength(255)),
       ...(user ? [v.pipe(v.string(), v.length(0))] : []),
     ]),
+    role: v.picklist(Object.values(Role).map((role) => role.value)),
   });
 
   const form = useForm<v.InferInput<typeof formSchema>>({
@@ -37,6 +42,7 @@ export function UserInputForm({
       name: user?.name || "",
       email: user?.email || "",
       password: "",
+      role: user?.role || Role.Viewer.value,
     },
     resolver: valibotResolver(formSchema),
   });
@@ -46,11 +52,7 @@ export function UserInputForm({
   const handleSubmit = form.handleSubmit(async (params) => {
     setError("");
 
-    const result = await action({
-      name: params.name,
-      email: params.email,
-      password: params.password,
-    });
+    const result = await action(params);
 
     if (!result.success) {
       setError(result.message);
@@ -128,6 +130,13 @@ export function UserInputForm({
             />
           </FormItem>
         )}
+      />
+      <FormSelect
+        control={form.control}
+        className="w-36"
+        name="role"
+        label="ロール"
+        options={Object.values(Role)}
       />
     </Form>
   );

@@ -1,14 +1,17 @@
 import { createClient } from "@/lib/supabase/server";
 import * as v from "valibot";
+import { Role, roleSchema } from "../role";
 
 const userMetadataSchema = v.object({
   name: v.optional(v.string(), ""),
+  role: v.optional(roleSchema, () => Role.Viewer.value),
 });
 
 export type User = {
   userId: string;
   name: string;
   email: string;
+  role: Role;
 };
 export async function getUsers(page: number) {
   const supabase = await createClient();
@@ -25,8 +28,11 @@ export async function getUsers(page: number) {
   return {
     users: listUsersResult.data.users.map(
       ({ email, id: userId, user_metadata: userMetadata }) => {
-        const { name } = v.parse(userMetadataSchema, userMetadata);
-        return { userId, name, email: v.parse(v.string(), email) };
+        return {
+          userId,
+          email: v.parse(v.string(), email),
+          ...v.parse(userMetadataSchema, userMetadata),
+        };
       }
     ),
     totalPage: Math.ceil(listUsersResult.data.total / perPage),

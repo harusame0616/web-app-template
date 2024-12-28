@@ -44,6 +44,7 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
     name: string;
     email: string;
     userId: string;
+    role: "admin" | "operator" | "viewer";
   }>();
   const [deletionUser, setDeletionUser] = useState<{
     name: string;
@@ -61,6 +62,7 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
           <TableRow>
             <TableHead>名前</TableHead>
             <TableHead>メールアドレス</TableHead>
+            <TableHead>ロール</TableHead>
             <TableHead className="w-14">操作</TableHead>
           </TableRow>
         </TableHeader>
@@ -70,9 +72,10 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
                 name: "",
                 email: "",
                 userId: "",
+                role: "viewer" as const,
               }))
             : props.users
-          ).map(({ userId, email, name }, i) => (
+          ).map(({ userId, email, name, role }, i) => (
             <TableRow key={userId || i}>
               <TableCell>
                 {props.skeleton ? (
@@ -83,6 +86,17 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
               </TableCell>
               <TableCell>
                 {props.skeleton ? <Skeleton className="h-4 w-10" /> : email}
+              </TableCell>
+              <TableCell>
+                {props.skeleton ? (
+                  <Skeleton className="h-4 w-10" />
+                ) : (
+                  {
+                    viewer: "閲覧者",
+                    operator: "オペレーター",
+                    admin: "管理者",
+                  }[role]
+                )}
               </TableCell>
               <TableCell>
                 <DropdownMenu>
@@ -101,7 +115,9 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                       <DropdownMenuItem
-                        onClick={() => setEditionUser({ name, email, userId })}
+                        onClick={() =>
+                          setEditionUser({ name, email, userId, role })
+                        }
                       >
                         <Edit />
                         編集

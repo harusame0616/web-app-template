@@ -45,7 +45,6 @@ const items = [
 export async function SideMenuContainer() {
   const supabaseClient = await createClient();
   const getUserResult = await supabaseClient.auth.getUser();
-  console.log(getUserResult);
   if (getUserResult.error || !getUserResult.data) {
     redirect("/admin/login");
   }
@@ -131,11 +130,7 @@ export function SideMenuPresenter(
 }
 
 type UserMiniProfileProps =
-  | {
-      skeleton?: false;
-      name: string;
-      email: string;
-    }
+  | { skeleton?: false; name: string; email: string }
   | { skeleton: true };
 function UserMiniProfile(props: UserMiniProfileProps) {
   return (
