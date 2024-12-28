@@ -10,7 +10,7 @@ export async function reset({ email }: { email: string }) {
   });
   if (result.error) {
     return fail(
-      "パスワードリセットメールの送信に失敗しました。時間をおいてお試しください"
+      "リセットメールの送信に失敗しました。時間をおいてお試しください"
     );
   }
   return succeed();

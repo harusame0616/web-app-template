@@ -23,7 +23,7 @@ export function ResetForm() {
   });
 
   return (
-    <Form {...form} submitButtonLabel="パスワードリセットメール送信">
+    <Form {...form} submitButtonLabel="リセットメール送信">
       <FormField
         control={form.control}
         name="email"
