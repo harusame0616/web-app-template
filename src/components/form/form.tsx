@@ -10,7 +10,7 @@ import React, { FormEventHandler, PropsWithChildren } from "react";
 import { FieldValues, FormProviderProps } from "react-hook-form";
 import { SubmitButton } from "./submit-button";
 
-type Props = { label: string; description: string; required?: boolean };
+type Props = { label: string; description?: string; required?: boolean };
 export function FormItem({
   children,
   label,

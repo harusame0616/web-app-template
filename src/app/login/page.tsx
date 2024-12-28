@@ -10,7 +10,7 @@ export default function Page() {
           {process.env.NEXT_PUBLIC_SERVICE_NAME}
         </Link>
         <LoginCard />
-        <Link href="/signup" className="underline text-center">
+        <Link href="/register" className="underline text-center">
           新規登録
         </Link>
       </div>
