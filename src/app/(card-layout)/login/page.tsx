@@ -10,7 +10,7 @@ export default function Page() {
   return (
     <>
       <LoginCard />
-      <Link href="/register" className="underline text-center">
+      <Link href="/register" className="text-center underline">
         新規登録
       </Link>
     </>

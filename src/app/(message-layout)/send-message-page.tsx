@@ -10,7 +10,7 @@ export default function SendMessagePage({ title, message }: Props) {
       <div className="flex justify-center p-8">
         <SendIcon size={64} />
       </div>
-      <h1 className="font-bold text-2xl mb-2">{title}</h1>
+      <h1 className="mb-2 text-2xl font-bold">{title}</h1>
       <p>{message}</p>
     </>
   );

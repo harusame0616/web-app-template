@@ -3,7 +3,7 @@ import { LoginForm } from "./login-form";
 
 export function LoginCard() {
   return (
-    <Card className="max-w-md w-full">
+    <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle className="flex justify-center">ログイン</CardTitle>
       </CardHeader>

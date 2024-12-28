@@ -19,12 +19,12 @@ export default function Layout({
       <Suspense fallback={<SideMenuPresenter skeleton />}>
         <SideMenuContainer />
       </Suspense>
-      <main className="grid grid-rows-[auto_1fr] flex-grow">
+      <main className="grid grow grid-rows-[auto_1fr]">
         <div className="grid grid-cols-[auto_1fr] items-center">
           <SidebarTrigger />
           <h1 className="p-2">{title}</h1>
         </div>
-        <div className="p-4 overflow-y-auto">{children}</div>
+        <div className="overflow-y-auto p-4">{children}</div>
       </main>
     </SidebarProvider>
   );

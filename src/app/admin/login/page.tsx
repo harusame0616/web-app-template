@@ -7,9 +7,9 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className="flex flex-col h-full items-center p-4">
-      <div className="flex-grow max-h-[120px]" />
-      <div className="max-w-sm w-full">
+    <div className="flex h-full flex-col items-center p-4">
+      <div className="max-h-[120px] grow" />
+      <div className="w-full max-w-sm">
         <LoginCard />
       </div>
     </div>

@@ -3,7 +3,7 @@ import { ResetForm } from "./reset-form";
 
 export function ResetCard() {
   return (
-    <Card className="max-w-md w-full">
+    <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle className="flex justify-center">
           パスワードリセット

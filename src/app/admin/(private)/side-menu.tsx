@@ -134,7 +134,7 @@ type UserMiniProfileProps =
   | { skeleton: true };
 function UserMiniProfile(props: UserMiniProfileProps) {
   return (
-    <div className="grid grid-cols-[auto_1fr] gap-2 items-center">
+    <div className="grid grid-cols-[auto_1fr] items-center gap-2">
       <Avatar>
         <Image src={UserImage} alt={""} />
         <AvatarFallback>
@@ -143,11 +143,11 @@ function UserMiniProfile(props: UserMiniProfileProps) {
       </Avatar>
       <div className="grid grid-rows-2 font-normal">
         <div className="truncate ">
-          {props.skeleton ? <Skeleton className="h-4 w-12 my-1" /> : props.name}
+          {props.skeleton ? <Skeleton className="my-1 h-4 w-12" /> : props.name}
         </div>
         <div className="truncate text-muted-foreground">
           {props.skeleton ? (
-            <Skeleton className="h-4 w-24 my-1" />
+            <Skeleton className="my-1 h-4 w-24" />
           ) : (
             props.email
           )}

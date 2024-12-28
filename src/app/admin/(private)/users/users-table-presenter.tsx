@@ -137,7 +137,7 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
         </TableBody>
       </Table>
       {!props.skeleton && !props.users.length && (
-        <div className="text-muted-foreground mt-8 text-center text-xs">
+        <div className="mt-8 text-center text-xs text-muted-foreground">
           ユーザーが見つかりません
         </div>
       )}

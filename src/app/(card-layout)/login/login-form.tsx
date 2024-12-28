@@ -62,7 +62,7 @@ export function LoginForm() {
 
         <Link
           href="/login/reset"
-          className="underline mt-2 block text-right text-sm"
+          className="mt-2 block text-right text-sm underline"
         >
           パスワードをお忘れですか？
         </Link>

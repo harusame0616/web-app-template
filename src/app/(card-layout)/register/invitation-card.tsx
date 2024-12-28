@@ -3,7 +3,7 @@ import { InvitationForm } from "./invitation-form";
 
 export function InvitationCard() {
   return (
-    <Card className="max-w-md w-full">
+    <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle className="flex justify-center">新規登録</CardTitle>
       </CardHeader>

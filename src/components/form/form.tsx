@@ -23,7 +23,7 @@ export function FormItem({
         <FormLabel className="flex items-center gap-1">
           <div className="font-bold">{label}</div>
           {required && (
-            <div className="border border-destructive rounded-lg px-2 text-destructive text-xs">
+            <div className="rounded-lg border border-destructive px-2 text-xs text-destructive">
               必須
             </div>
           )}
@@ -74,7 +74,7 @@ export function Form<
           </SubmitButton>
         )}
         {errorMessage && (
-          <div className="text-destructive text-sm">{errorMessage}</div>
+          <div className="text-sm text-destructive">{errorMessage}</div>
         )}
       </form>
     </ShadcnForm>

@@ -22,9 +22,9 @@ export function LogoutPage() {
   });
 
   return (
-    <div className="max-h-32 flex flex-col items-center h-full justify-end">
+    <div className="flex h-full max-h-32 flex-col items-center justify-end">
       <div>ログアウト中です</div>
-      <RefreshCw className="animate-spin mt-8" />
+      <RefreshCw className="mt-8 animate-spin" />
     </div>
   );
 }
