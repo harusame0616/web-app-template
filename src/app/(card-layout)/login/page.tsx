@@ -1,5 +1,6 @@
 import { Metadata } from "next";
-import Link from "next/link";
+
+import { Link } from "@/components/link";
 
 import { LoginCard } from "./login-card";
 
@@ -11,7 +12,7 @@ export default function Page() {
   return (
     <>
       <LoginCard />
-      <Link href="/register" className="text-center underline">
+      <Link href="/register" className="text-center">
         新規登録
       </Link>
     </>

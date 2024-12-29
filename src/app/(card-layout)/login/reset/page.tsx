@@ -1,5 +1,6 @@
 import { Metadata } from "next";
-import Link from "next/link";
+
+import { Link } from "@/components/link";
 
 import { ResetCard } from "./reset-card";
 
@@ -11,10 +12,8 @@ export default function Page() {
   return (
     <>
       <ResetCard />
-      <div className="mt-4 flex justify-center">
-        <Link href="/signin" className="underline">
-          ログイン
-        </Link>
+      <div className="text-center">
+        <Link href="/login">ログイン</Link>
       </div>
     </>
   );

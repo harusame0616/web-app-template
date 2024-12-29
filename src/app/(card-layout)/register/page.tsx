@@ -1,5 +1,6 @@
 import { Metadata } from "next";
-import Link from "next/link";
+
+import { Link } from "@/components/link";
 
 import { InvitationCard } from "./invitation-card";
 
@@ -11,10 +12,8 @@ export default function Page() {
   return (
     <>
       <InvitationCard />
-      <div className="mt-4 flex justify-center">
-        <Link href="/login" className="underline">
-          ログイン
-        </Link>
+      <div className="text-center">
+        <Link href="/login">ログイン</Link>
       </div>
     </>
   );

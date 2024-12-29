@@ -6,9 +6,9 @@ import {
   User,
 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { Link } from "@/components/link";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -76,7 +76,7 @@ export function SideMenuPresenter(
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link href={item.url}>
+                    <Link href={item.url} className="no-underline">
                       <item.icon />
                       <span>{item.title}</span>
                     </Link>

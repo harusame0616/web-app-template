@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import * as v from "valibot";
 
 import { Form, FormItem } from "@/components/form/form";
+import { Link } from "@/components/link";
 import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { emailSchema, passwordSchema } from "@/domains/user/schema";
@@ -62,12 +62,11 @@ export function LoginForm() {
           )}
         />
 
-        <Link
-          href="/login/reset"
-          className="mt-2 block text-right text-sm underline"
-        >
-          パスワードをお忘れですか？
-        </Link>
+        <div className="mt-2 text-right">
+          <Link href="/login/reset" className="text-sm">
+            パスワードをお忘れですか？
+          </Link>
+        </div>
       </div>
     </Form>
   );
