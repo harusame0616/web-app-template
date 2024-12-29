@@ -1,5 +1,6 @@
 import { PropsWithChildren } from "react";
 
+import { AppName } from "@/app-info";
 import { Link } from "@/components/link";
 
 export default function Layout({ children }: PropsWithChildren) {
@@ -8,7 +9,7 @@ export default function Layout({ children }: PropsWithChildren) {
       <div className="max-h-[80px] grow" />
       <div className="flex w-full max-w-sm flex-col items-center gap-6">
         <Link href="/" className="text-2xl font-bold no-underline">
-          {process.env.NEXT_PUBLIC_SERVICE_NAME}
+          {AppName}
         </Link>
         {children}
       </div>

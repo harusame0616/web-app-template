@@ -1,14 +1,15 @@
 import { Metadata } from "next";
 import { PropsWithChildren, ReactNode, Suspense } from "react";
 
+import { AppName } from "@/app-info";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 import { SideMenuContainer, SideMenuPresenter } from "./side-menu";
 
 export const metadata: Metadata = {
   title: {
-    template: `%s | ${process.env.NEXT_PUBLIC_SERVICE_NAME}（Admin）`,
-    default: `管理画面 ${process.env.NEXT_PUBLIC_SERVICE_NAME}`,
+    template: `%s | ${AppName}（Admin）`,
+    default: `Admin | ${AppName}`,
   },
 };
 
