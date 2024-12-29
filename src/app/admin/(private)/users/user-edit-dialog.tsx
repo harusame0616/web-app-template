@@ -3,12 +3,14 @@ import { ComponentProps, useId } from "react";
 import { Dialog } from "@/components/dialog";
 
 import { editUserAction } from "./_actions";
+import { Role } from "./role";
 import { UserInputForm } from "./user-input-form";
 
 type Props = Omit<ComponentProps<typeof Dialog>, "children"> & {
   userId: string;
   name: string;
   email: string;
+  role: Role;
 };
 export function UserEditDialog({
   open,
@@ -16,6 +18,7 @@ export function UserEditDialog({
   name,
   email,
   userId,
+  role,
 }: Props) {
   const formId = useId();
 
@@ -31,7 +34,7 @@ export function UserEditDialog({
         formId={formId}
         onSuccess={() => onOpenChange(false)}
         action={(params) => editUserAction({ ...params, userId })}
-        user={{ email, name }}
+        user={{ email, name, role, userId }}
       />
     </Dialog>
   );

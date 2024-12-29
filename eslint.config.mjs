@@ -1,5 +1,6 @@
 import { FlatCompat } from "@eslint/eslintrc";
 import vitest from "@vitest/eslint-plugin";
+import playwright from 'eslint-plugin-playwright'
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import tailwind from "eslint-plugin-tailwindcss";
 import neostandard from "neostandard";
@@ -27,13 +28,18 @@ const eslintConfig = [
     },
   },
   {
-    files: ["**/*.test.ts"], // or any other pattern
+    files: ["**/*.{browser,server}.test.{ts,tsx}"], // or any other pattern
     plugins: { vitest },
     rules: {
       ...vitest.configs.recommended.rules,
       "vitest/no-alias-methods": ["error"],
     },
   },
+  {
+    ...playwright.configs["flat/recommended"],
+    files: ["e2e/**/*.e2e.test.ts"]
+  }
+
 ];
 
 export default eslintConfig;

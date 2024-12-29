@@ -20,7 +20,8 @@ export function LogoutPage() {
     client.auth.signOut().then(() => {
       router.refresh();
     });
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex h-full max-h-32 flex-col items-center justify-end">

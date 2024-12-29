@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import * as v from "valibot";
 
 import { Form, FormItem } from "@/components/form/form";
@@ -57,14 +56,6 @@ export function UserInputForm({
       }
     },
   });
-
-  useEffect(() => {
-    form.reset({
-      name: user?.name || "",
-      email: user?.email || "",
-      password: "",
-    });
-  }, [form, user]);
 
   return (
     <Form {...form} noSubmitButton formId={formId}>
