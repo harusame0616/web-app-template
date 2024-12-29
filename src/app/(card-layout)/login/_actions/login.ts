@@ -18,7 +18,7 @@ export async function login({
       console.log("認証失敗", { email, password, error: result.error });
       return fail("ログインに失敗しました");
     }
-    console.log("認証成功", { email: email, id: result.data.user.id });
+    console.log("認証成功", { email, id: result.data.user.id });
     return succeed();
   } catch (error) {
     console.error("認証エラー", { error, email, password });

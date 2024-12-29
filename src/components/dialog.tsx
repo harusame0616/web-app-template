@@ -16,9 +16,10 @@ type DialogProps = {
   open: boolean;
   title: string;
   onOpenChange: (open: boolean) => void;
-  children: React.ReactNode;
+  children: ReactNode;
   trigger?: ReactNode;
   primaryButtonLabel: string;
+  description?: string;
   onPrimaryButtonClick?: () => void;
   formId?: string;
 };
@@ -26,6 +27,7 @@ export function Dialog({
   open,
   trigger,
   onOpenChange,
+  description,
   children,
   title,
   primaryButtonLabel,
@@ -38,7 +40,7 @@ export function Dialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription></DialogDescription>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         {children}
         <Separator />

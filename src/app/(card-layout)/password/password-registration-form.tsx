@@ -26,8 +26,10 @@ export function PasswordRegistrationForm() {
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
       );
-      const { refresh_token } = Object.fromEntries(searchParams.entries());
-      if (refresh_token) {
+      const { refresh_token: refreshToken } = Object.fromEntries(
+        searchParams.entries()
+      );
+      if (refreshToken) {
         await supabase.auth.refreshSession({
           refresh_token: searchParams.get("refresh_token")!,
         });
