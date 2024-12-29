@@ -7,23 +7,14 @@ import { useForm } from "@/lib/use-form";
 import Link from "next/link";
 import * as v from "valibot";
 import { loginAction } from "../_actions/login";
+import { emailSchema, passwordSchema } from "@/domains/user/schema";
 
 export function LoginForm() {
   const form = useForm({
     defaultValues: { email: "", password: "" },
     schema: v.object({
-      email: v.pipe(
-        v.string(),
-        v.minLength(1, "メールアドレスを入力してください"),
-        v.maxLength(255, "メールアドレスは最大255文字で入力してください"),
-        v.email("メールアドレス形式で入力してください")
-      ),
-      password: v.pipe(
-        v.string(),
-        v.minLength(1, "パスワードを入力してください"),
-        v.minLength(8, "パスワードは最低8文字で入力してください"),
-        v.maxLength(255, "パスワードは最大255文字で入力してください")
-      ),
+      email: emailSchema,
+      password: passwordSchema,
     }),
     onSubmit: async (params, setErrorMessage) => {
       const result = await loginAction(params);
@@ -39,10 +30,7 @@ export function LoginForm() {
         control={form.control}
         name="email"
         render={({ field }) => (
-          <FormItem
-            label="メールアドレス"
-            description="メールアドレスを入力してください"
-          >
+          <FormItem label="メールアドレス">
             <Input
               {...field}
               type="email"
@@ -56,10 +44,7 @@ export function LoginForm() {
         <FormField
           name="password"
           render={({ field }) => (
-            <FormItem
-              label="パスワード"
-              description="パスワードを入力してください"
-            >
+            <FormItem label="パスワード">
               <Input
                 {...field}
                 type="password"
