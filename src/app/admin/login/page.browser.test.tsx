@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/vitest";
+
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, expect, test, vi } from "vitest";
+
 import { loginAction } from "./_actions/login";
 import Page from "./page";
 

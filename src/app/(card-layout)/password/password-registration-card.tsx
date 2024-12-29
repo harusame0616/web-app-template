@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 import { PasswordRegistrationForm } from "./password-registration-form";
 
 export function PasswordRegistrationCard() {

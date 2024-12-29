@@ -1,5 +1,6 @@
-import SendMessagePage from "@/app/(message-layout)/send-message-page";
 import { Metadata } from "next";
+
+import SendMessagePage from "@/app/(message-layout)/send-message-page";
 
 export const metadata: Metadata = {
   title: "リセットメール送信完了",

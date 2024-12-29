@@ -1,13 +1,14 @@
 "use client";
 
+import { createBrowserClient } from "@supabase/ssr";
+import { useRouter } from "next/navigation";
+import * as v from "valibot";
+
 import { Form, FormItem } from "@/components/form/form";
 import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { passwordSchema } from "@/domains/user/schema";
 import { useForm } from "@/lib/use-form";
-import { createBrowserClient } from "@supabase/ssr";
-import { useRouter } from "next/navigation";
-import * as v from "valibot";
 
 export function PasswordRegistrationForm() {
   const router = useRouter();

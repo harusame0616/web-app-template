@@ -1,6 +1,7 @@
-import { Button } from "@/components/ui/button";
 import { LoaderIcon } from "lucide-react";
 import { ComponentProps, PropsWithChildren } from "react";
+
+import { Button } from "@/components/ui/button";
 
 type Props = { loading?: boolean } & ComponentProps<typeof Button>;
 

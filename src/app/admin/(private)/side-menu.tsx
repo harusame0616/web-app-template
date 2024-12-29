@@ -5,6 +5,9 @@ import {
   LogOutIcon,
   User,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -29,9 +32,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { createClient } from "@/lib/supabase/server";
-import Image from "next/image";
-import Link from "next/link";
-import { redirect } from "next/navigation";
+
 import UserImage from "./user.png";
 
 const items = [

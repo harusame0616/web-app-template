@@ -1,7 +1,9 @@
-import { Dialog } from "@/components/dialog";
 import { ComponentProps, useId } from "react";
-import { UserInputForm } from "./user-input-form";
+
+import { Dialog } from "@/components/dialog";
+
 import { editUserAction } from "./_actions";
+import { UserInputForm } from "./user-input-form";
 
 type Props = Omit<ComponentProps<typeof Dialog>, "children"> & {
   userId: string;

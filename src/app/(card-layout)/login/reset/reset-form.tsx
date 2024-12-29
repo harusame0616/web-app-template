@@ -1,12 +1,14 @@
 "use client";
 
+import * as v from "valibot";
+
 import { Form, FormItem } from "@/components/form/form";
 import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useForm } from "@/lib/use-form";
-import * as v from "valibot";
-import { resetAction } from "./_actions";
 import { emailSchema } from "@/domains/user/schema";
+import { useForm } from "@/lib/use-form";
+
+import { resetAction } from "./_actions";
 
 export function ResetForm() {
   const form = useForm({

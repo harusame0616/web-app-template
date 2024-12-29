@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+
 import { LoginCard } from "./_components/login-card";
 
 export const metadata: Metadata = {

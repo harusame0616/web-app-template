@@ -2,12 +2,13 @@
 
 import * as v from "valibot";
 
+import { emailSchema, nameSchema, passwordSchema } from "@/domains/user/schema";
 import { createAction } from "@/lib/server-action";
+
 import { roleSchema } from "../role";
 import { addUser } from "./add-user";
 import { deleteUser } from "./delete-user";
 import { editUser } from "./edit-user";
-import { emailSchema, nameSchema, passwordSchema } from "@/domains/user/schema";
 
 export const addUserAction = createAction(addUser, {
   inputSchema: v.object({

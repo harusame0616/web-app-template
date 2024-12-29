@@ -1,6 +1,7 @@
-import Link from "next/link";
-import { LoginCard } from "./login-card";
 import { Metadata } from "next";
+import Link from "next/link";
+
+import { LoginCard } from "./login-card";
 
 export const metadata: Metadata = {
   title: "ログイン",

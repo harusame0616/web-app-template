@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+
 import { LogoutPage } from "./logout-page";
 
 export const metadata: Metadata = {

@@ -1,7 +1,9 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { PropsWithChildren, ReactNode, Suspense } from "react";
-import { SideMenuContainer, SideMenuPresenter } from "./side-menu";
 import { Metadata } from "next";
+import { PropsWithChildren, ReactNode, Suspense } from "react";
+
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+
+import { SideMenuContainer, SideMenuPresenter } from "./side-menu";
 
 export const metadata: Metadata = {
   title: {

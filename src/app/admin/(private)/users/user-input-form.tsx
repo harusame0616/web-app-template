@@ -1,14 +1,16 @@
+import { useEffect } from "react";
+import * as v from "valibot";
+
 import { Form, FormItem } from "@/components/form/form";
 import { FormSelect } from "@/components/form/form-select";
 import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { emailSchema, nameSchema, passwordSchema } from "@/domains/user/schema";
 import { Result } from "@/lib/result";
 import { useForm } from "@/lib/use-form";
-import { useEffect } from "react";
-import * as v from "valibot";
+
 import { User } from "./_data/user";
 import { Role } from "./role";
-import { emailSchema, nameSchema, passwordSchema } from "@/domains/user/schema";
 
 type UserInputFormProps = {
   formId: string;

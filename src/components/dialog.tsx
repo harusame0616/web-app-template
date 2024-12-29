@@ -1,16 +1,17 @@
+import { DialogClose } from "@radix-ui/react-dialog";
 import { PropsWithChildren, ReactNode } from "react";
+
+import { Button } from "./ui/button";
 import {
   Dialog as ShadcnDialog,
   DialogContent,
-  DialogTrigger,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "./ui/dialog";
-import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
-import { DialogClose } from "@radix-ui/react-dialog";
 
 type DialogProps = {
   open: boolean;

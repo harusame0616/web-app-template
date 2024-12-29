@@ -1,6 +1,7 @@
-import Link from "next/link";
-import { ResetCard } from "./reset-card";
 import { Metadata } from "next";
+import Link from "next/link";
+
+import { ResetCard } from "./reset-card";
 
 export const metadata: Metadata = {
   title: "パスワードリセット",

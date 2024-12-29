@@ -1,5 +1,7 @@
-import { createClient } from "@/lib/supabase/server";
 import * as v from "valibot";
+
+import { createClient } from "@/lib/supabase/server";
+
 import { Role, roleSchema } from "../role";
 
 const userMetadataSchema = v.object({

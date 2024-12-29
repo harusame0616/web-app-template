@@ -1,6 +1,7 @@
-import * as v from "valibot";
-import { UsersPage } from "./user-page";
 import { Metadata } from "next";
+import * as v from "valibot";
+
+import { UsersPage } from "./user-page";
 
 export const metadata: Metadata = {
   title: "ユーザー一覧",

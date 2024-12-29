@@ -1,5 +1,6 @@
 import { fail, Result, succeed } from "@/lib/result";
 import { createClient } from "@/lib/supabase/server";
+
 import { Role } from "../role";
 
 type EditUserParams = {

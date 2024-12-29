@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+
 import SendMessagePage from "../../send-message-page";
 
 export const metadata: Metadata = {

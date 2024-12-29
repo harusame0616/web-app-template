@@ -1,10 +1,11 @@
 "use client";
 
-import { createClient } from "@/lib/supabase/browser";
 import { RefreshCw } from "lucide-react";
+import { Metadata } from "next";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { Metadata } from "next";
+
+import { createClient } from "@/lib/supabase/browser";
 
 export const metadata: Metadata = {
   title: "ログアウト",

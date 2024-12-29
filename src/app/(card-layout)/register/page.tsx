@@ -1,6 +1,7 @@
-import Link from "next/link";
-import { InvitationCard } from "./invitation-card";
 import { Metadata } from "next";
+import Link from "next/link";
+
+import { InvitationCard } from "./invitation-card";
 
 export const metadata: Metadata = {
   title: "ユーザー登録",

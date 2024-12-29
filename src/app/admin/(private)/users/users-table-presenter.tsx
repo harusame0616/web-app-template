@@ -1,5 +1,8 @@
 "use client";
 
+import { Edit, Trash } from "lucide-react";
+import { useState } from "react";
+
 import { AlertDialog } from "@/components/alert-dialog";
 import { Pagination } from "@/components/pagination";
 import { Button } from "@/components/ui/button";
@@ -21,8 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Edit, Trash } from "lucide-react";
-import { useState } from "react";
+
 import { deleteUserAction } from "./_actions";
 import { User } from "./_data/user";
 import { UserEditDialog } from "./user-edit-dialog";
