@@ -63,7 +63,7 @@ export function SideMenuPresenter(
         email: string;
         name: string;
       }
-    | { skeleton: true }
+    | { skeleton: true },
 ) {
   return (
     <Sidebar>

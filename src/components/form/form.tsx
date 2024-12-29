@@ -42,7 +42,7 @@ export function Form<
   TFieldValues extends FieldValues,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TContext = any,
-  TTransformedValues extends FieldValues | undefined = undefined
+  TTransformedValues extends FieldValues | undefined = undefined,
 >({
   children,
   onSubmit,

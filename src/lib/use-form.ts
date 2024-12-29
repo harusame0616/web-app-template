@@ -13,7 +13,7 @@ export function useForm<Schema extends v.ObjectSchema<any, any>>({
   defaultValues: DefaultValues<v.InferInput<Schema>>;
   onSubmit: (
     values: v.InferOutput<Schema>,
-    setErrorMessage: Dispatch<SetStateAction<string>>
+    setErrorMessage: Dispatch<SetStateAction<string>>,
   ) => Promise<void>;
 }) {
   const [errorMessage, setErrorMessage] = useState("");

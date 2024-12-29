@@ -11,7 +11,7 @@ import {
 
 export const FormSelect = <
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
   ...props
 }: Omit<ControllerProps<TFieldValues, TName>, "render"> & {

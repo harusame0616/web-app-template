@@ -24,7 +24,7 @@ test("入力の初期状態は空", () => {
   render(<Page />);
 
   expect(screen.getByRole("textbox", { name: /^メールアドレス$/ })).toHaveValue(
-    ""
+    "",
   );
   expect(screen.getByLabelText(/^パスワード$/)).toHaveValue("");
 });
@@ -55,7 +55,7 @@ test.each([
 
     await userEvent.type(
       screen.getByRole("textbox", { name: /^メールアドレス$/ }),
-      email
+      email,
     );
     await userEvent.type(screen.getByLabelText(/^パスワード$/), password);
     await userEvent.click(screen.getByRole("button", { name: /^ログイン$/ }));
@@ -63,7 +63,7 @@ test.each([
     for (const message of messages) {
       expect(screen.getByText(message)).toBeInTheDocument();
     }
-  }
+  },
 );
 
 test("未入力の場合バリデーション失敗のメッセージが表示され、ログイン処理が呼び出されない", async () => {
@@ -74,7 +74,7 @@ test("未入力の場合バリデーション失敗のメッセージが表示�
   expect(loginAction).not.toHaveBeenCalled();
 
   expect(
-    screen.getByText("メールアドレスを入力してください")
+    screen.getByText("メールアドレスを入力してください"),
   ).toBeInTheDocument();
 });
 
@@ -83,7 +83,7 @@ test("フォーム内容もとにログイン処理が呼び出される", async
 
   await userEvent.type(
     screen.getByRole("textbox", { name: /^メールアドレス$/ }),
-    "a@example.com"
+    "a@example.com",
   );
   await userEvent.type(screen.getByLabelText(/^パスワード$/), "123456");
   await userEvent.click(screen.getByRole("button", { name: "ログイン" }));
@@ -102,7 +102,7 @@ test("ログイン失敗した場合、エラーメッセージを表示する",
 
   await userEvent.type(
     screen.getByRole("textbox", { name: /^メールアドレス$/ }),
-    "a@example.com"
+    "a@example.com",
   );
   await userEvent.type(screen.getByLabelText(/^パスワード$/), "123456");
   await userEvent.click(screen.getByRole("button", { name: /^ログイン$/ }));

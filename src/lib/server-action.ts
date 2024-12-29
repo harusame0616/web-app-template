@@ -8,7 +8,7 @@ export function createAction<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   InputSchema extends v.BaseSchema<any, any, any>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Handler extends (inputs: v.InferInput<InputSchema>) => Promise<Result<any>>
+  Handler extends (inputs: v.InferInput<InputSchema>) => Promise<Result<any>>,
 >(
   handler: Handler,
   {
@@ -19,10 +19,10 @@ export function createAction<
     inputSchema: InputSchema;
     revalidatePaths?: string[];
     redirectTo?: string;
-  }
+  },
 ) {
   return async function action(
-    input: v.InferOutput<InputSchema>
+    input: v.InferOutput<InputSchema>,
   ): Promise<Awaited<ReturnType<Handler>> | Failure> {
     const parsedParams = v.safeParse(inputSchema, input);
     if (!parsedParams.success) {

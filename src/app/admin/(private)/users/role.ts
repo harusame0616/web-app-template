@@ -9,5 +9,5 @@ export const Role = {
 export type Role = (typeof Role)[keyof typeof Role]["value"];
 
 export const roleSchema = v.picklist(
-  Object.values(Role).map((role) => role.value)
+  Object.values(Role).map((role) => role.value),
 );

@@ -19,7 +19,7 @@ export default async function NextPage({
   const searchParamsAwaited = await searchParams;
   const searchParamsResult = v.safeParse(
     searchParamsSchema,
-    searchParamsAwaited
+    searchParamsAwaited,
   );
   const { page } = searchParamsResult.success
     ? searchParamsResult.output

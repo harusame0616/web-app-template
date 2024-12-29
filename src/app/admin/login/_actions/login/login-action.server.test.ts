@@ -32,7 +32,7 @@ describe("loginAction", () => {
 
       expect(login).toHaveBeenCalledWith({ email, password });
       expect(redirect).toHaveBeenCalledWith("/admin");
-    }
+    },
   );
 
   test.each([
@@ -66,8 +66,8 @@ describe("loginAction", () => {
         expect.objectContaining({
           success: false,
           // 基本フロントでバリデーションを行ってそのエラーを表示するため、バリデーションエラーのメッセージのチェックは行わない
-        })
+        }),
       );
-    }
+    },
   );
 });

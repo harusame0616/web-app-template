@@ -20,15 +20,15 @@ export function PasswordRegistrationForm() {
     }),
     onSubmit: async ({ password }, setErrorMessage) => {
       const searchParams = new URLSearchParams(
-        window.location.hash.substring(1)
+        window.location.hash.substring(1),
       );
 
       const supabase = createBrowserClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       );
       const { refresh_token: refreshToken } = Object.fromEntries(
-        searchParams.entries()
+        searchParams.entries(),
       );
       if (refreshToken) {
         await supabase.auth.refreshSession({

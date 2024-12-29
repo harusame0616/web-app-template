@@ -35,7 +35,7 @@ export async function getUsers(page: number) {
           email: v.parse(v.string(), email),
           ...v.parse(userMetadataSchema, userMetadata),
         };
-      }
+      },
     ),
     totalPage: Math.ceil(listUsersResult.data.total / perPage),
   };
