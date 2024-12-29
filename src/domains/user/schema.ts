@@ -14,4 +14,3 @@ export const passwordSchema = v.pipe(
 );
 
 export const nameSchema = v.pipe(v.string(), v.minLength(1), v.maxLength(64));
-
