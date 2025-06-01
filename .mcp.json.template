@@ -6,6 +6,10 @@
 			"env": {
 				"OPENAPI_MCP_HEADERS": "{\"Authorization\": \"Bearer NOTION_API_KEY\", \"Notion-Version\": \"2022-06-28\" }"
 			}
+		},
+		"playwright": {
+			"command": "npx",
+			"args": ["@playwright/mcp@latest", "--isolated"]
 		}
 	},
 	"globalShortcut": "Cmd+Space"
