@@ -30,24 +30,25 @@ pnpm test:e2e    # Playwright E2Eテストを実行
 
 ## 技術スタック
 
-| カテゴリ               | 技術               |
+以下のパッケージは常にインストール済みで利用可能です
+| カテゴリ | 技術 |
 | ---------------------- | ------------------ |
-| パッケージマネージャー | pnpm               |
-| フレームワーク         | Next.js App Router |
-| CSS                    | Tailwind CSS       |
-| UIライブラリ           | shadcn/ui          |
-| バリデーション         | Valibot            |
-| フォーム               | React Hook Form    |
-| テストランナー         | Vitest             |
-| コンポーネントテスト   | Testing Library    |
-| E2Eテスト              | Playwright         |
-| VRT                    | Playwright         |
-| DBクライアント         | Prisma             |
-| 認証・DB               | Supabase           |
-| Linter                 | Biome              |
-| Formatter              | Prettier           |
-| 時刻ライブラリ         | date-fns           |
-| アイコン               | lucide-react       |
+| パッケージマネージャー | pnpm |
+| フレームワーク | Next.js App Router |
+| CSS | Tailwind CSS |
+| UIライブラリ | shadcn/ui |
+| バリデーション | Valibot |
+| フォーム | React Hook Form |
+| テストランナー | Vitest |
+| コンポーネントテスト | Testing Library |
+| E2Eテスト | Playwright |
+| VRT | Playwright |
+| DBクライアント | Prisma |
+| 認証・DB | Supabase |
+| Linter | Biome |
+| Formatter | Prettier |
+| 時刻ライブラリ | date-fns |
+| アイコン | lucide-react |
 
 ## アーキテクチャ概要
 
@@ -111,9 +112,16 @@ pnpm test:e2e    # Playwright E2Eテストを実行
 - Suspense とスケルトンを活用しローディング状態を明示する
   - スケルトンは CLS が発生しないように実装する
 - useMemo / memo / useCallback は React コンパイラーに任せるため使用を避ける
-- Container/Presentational パターンを利用する
+- データの取得がある場合 Container/Presentational パターンを利用する
   - Container : RSC でデータフェッチの責務を負う
   - Presenter: コンポーネントが表示の責務を負うことを優先する(RSC/クライアントコンポーネント)
+  - データ取得層がない場合は Container/Presenter を分けずに作成する
+    - データ取得があるある場合 FooContainer / FooPresenter
+    - データ取得がない場合：Foo
+      - データ取得がある場合：FooContainer（データ取得） / FooPresenter（表示）
+      - データ取得がない場合：Foo のみ（分割しない）
+    - なお、本来データ取得があり、仮実装でモックデータの直接インポートをする場合もデータ取得としてみなす
+    - page.tsx から呼び出す際も、データ取得がなければ FooPage を直接呼び出す（FooPageContainer は作らない）
 - React のベストプラクティスを採用する
 - Nextjs のベストプラクティスを採用する
 - アクセシビリティーを考慮する
@@ -122,6 +130,7 @@ pnpm test:e2e    # Playwright E2Eテストを実行
 
 - RSC ファーストの設計を行う
 - データフェッチは data/フォルダに関数を作成して呼び出すだけにする
+- データフェッチは極力末端のコンポーネントで行う。
 
 #### クライアントコンポーネント
 
@@ -130,6 +139,7 @@ pnpm test:e2e    # Playwright E2Eテストを実行
 - ロジックはカスタム hook に切り出す
 - useEffect は最小限に使用する
   - 公式ドキュメントの「そのエフェクトは不要かも」を参考にする
+- フォームは react-hook-form と shadcn の Form コンポーネントを利用する
 
 #### その他
 
@@ -140,11 +150,70 @@ pnpm test:e2e    # Playwright E2Eテストを実行
 - Nextjs の固有機能に関する責務を負う
   - SearchParams のパースや next/\* パッケージの機能を利用するもの
 - 実際のページの機能は ○○Page 関数として別ファイルに切り出して呼び出す
+- 引数は NextPageProps 型として、 "@/lib/nextjs/next-page.js からインポートする
+- params, searchParams を使用する場合は parseParams, parseSearchParams を同階層の next-page-props.ts 定義してパースする
 
-#### ○○-page.tsx
+例: page.tsx
+
+```tsx
+import * as v from "valibot";
+
+import type { NextPageProps } from "@/lib/nextjs/next-page";
+import { fail, succeed } from "@/lib/result";
+
+export default function NextPage({ params, searchParams }: NextPageProps) {
+  const parsedParams = parseParams(params);
+  const parsedSearchParams = parseSearchParams(searchParams);
+
+  if (!parsedParams.success || !parsedSearchParams.success) {
+    return <div>適切なエラーメッセージ</div>;
+  }
+
+  const { id } = parsedParams.data;
+  const { bar } = parsedSearchParams.data;
+
+  return <FooPageContainer id={id} bar={bar} />;
+}
+```
+
+例： next-page-props.ts
+
+```ts
+function parseParams(params: unknown) {
+  const result = v.safeParse(
+    v.object({
+      foo: v.string(),
+    }),
+  );
+
+  if (!result.success) {
+    return fail(result.error);
+  }
+
+  return succeed(result.data);
+}
+
+function parseSearchParams(searchParams: unknown) {
+  const result = v.safeParse(
+    v.object({
+      bar: v.string(),
+    }),
+  );
+
+  if (!result.success) {
+    return fail(result.error);
+  }
+
+  return succeed(result.data);
+}
+```
+
+#### foo-page.tsx
 
 - ○○Page 関数を定義しエクスポートする
 - RSC で実装する
+- 必要なパラメーターを個別に受け取る(searchParams のまま受け取らない)
+  - type FooPageContainerProps = {fooId:string, barCount: number}
 
 ### バックエンド
 
@@ -218,18 +287,14 @@ _actions/
 ### フロー
 
 1. 詳細な作業計画を立て合意を得る
-2. 必要なテストケースを洗い出し合意を得る
-3. テストを実装し合意を得る
-4. 処理の設計方針を検討し合意を得る
-5. 処理を実装する
-6. lint・テストを実施
-   - テストが通るまで修正、テスト実施を繰り返す
-7. コーディング内容を俯瞰して確認し、リファクタリングできる箇所を修正する
-   - 修正が完了したら`pnpm test`コマンドを実施する
-8. lint-テストを実施
-   - テストが通るまで修正、テスト実施を繰り返す
+2. TDD を元に開発を行う
 
 ### 補足
 
-- lintエラーの修正は3回試みて治らなかったら無視する
-- テストを3回実施・修正しても通らなかったら無視する
+- lintエラーの修正は2回試みて治らなかったらユーザーに相談する
+- テストを2回実施・修正しても通らなかったらユーザーに相談する
+
+## 他
+
+- ユーザーが質問してきた際は質問に対する回答のみをする
+- ユーザーの依頼に対して、作業前にユーザーに合意を得るまで調査と作業計画を立てる
