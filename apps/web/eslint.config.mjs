@@ -1,6 +1,6 @@
 import { FlatCompat } from "@eslint/eslintrc";
 import vitest from "@vitest/eslint-plugin";
-import playwright from 'eslint-plugin-playwright'
+import playwright from "eslint-plugin-playwright";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 // import tailwind from "eslint-plugin-tailwindcss"; // TODO: Tailwind CSS v4との互換性問題により一時的に無効化
 import neostandard from "neostandard";
@@ -15,7 +15,14 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...compat.config({
+    extends: ["next/core-web-vitals", "next/typescript"],
+    settings: {
+      next: {
+        rootDir: "apps/web",
+      },
+    },
+  }),
   // ...tailwind.configs["flat/recommended"], // TODO: Tailwind CSS v4との互換性問題により一時的に無効化
   ...neostandard({ noStyle: true, noJsx: true }),
   {
@@ -37,9 +44,8 @@ const eslintConfig = [
   },
   {
     ...playwright.configs["flat/recommended"],
-    files: ["e2e/**/*.e2e.test.ts"]
-  }
-
+    files: ["e2e/**/*.e2e.test.ts"],
+  },
 ];
 
 export default eslintConfig;
