@@ -2,7 +2,7 @@ import { FlatCompat } from "@eslint/eslintrc";
 import vitest from "@vitest/eslint-plugin";
 import playwright from 'eslint-plugin-playwright'
 import simpleImportSort from "eslint-plugin-simple-import-sort";
-import tailwind from "eslint-plugin-tailwindcss";
+// import tailwind from "eslint-plugin-tailwindcss"; // TODO: Tailwind CSS v4との互換性問題により一時的に無効化
 import neostandard from "neostandard";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
@@ -16,7 +16,7 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
-  ...tailwind.configs["flat/recommended"],
+  // ...tailwind.configs["flat/recommended"], // TODO: Tailwind CSS v4との互換性問題により一時的に無効化
   ...neostandard({ noStyle: true, noJsx: true }),
   {
     plugins: {
