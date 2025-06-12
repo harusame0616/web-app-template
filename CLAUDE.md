@@ -36,14 +36,14 @@ pnpm test:e2e    # Playwright E2Eテストを実行
 | パッケージマネージャー | pnpm |
 | フレームワーク | Next.js App Router |
 | CSS | Tailwind CSS |
-| UIライブラリ | shadcn/ui |
+| UI ライブラリ | shadcn/ui |
 | バリデーション | Valibot |
 | フォーム | React Hook Form |
 | テストランナー | Vitest |
 | コンポーネントテスト | Testing Library |
-| E2Eテスト | Playwright |
+| E2E テスト | Playwright |
 | VRT | Playwright |
-| DBクライアント | Prisma |
+| DB クライアント | Prisma |
 | 認証・DB | Supabase |
 | Linter | Biome |
 | Formatter | Prettier |
@@ -52,24 +52,33 @@ pnpm test:e2e    # Playwright E2Eテストを実行
 
 ## アーキテクチャ概要
 
-認証機能と管理画面を備えたNext.js 15のWebアプリケーションテンプレートです。
+認証機能と管理画面を備えた Next.js 15 の Web アプリケーションテンプレートです。
 
 ### プロジェクト構造
 
-- `src/app/` - Next.js App Routerのページとレイアウト
+- `apps/src/web/` - Next.js App Router のページとレイアウト
+  - `(card-layout)/` - 公開認証ページ（ログイン、登録、パスワードリセット）
+  - `admin/` - 保護された管理画面（ユーザー管理機能付き）
+- `apps/web/src/components/` - 再利用可能なコンポーネント
+  - `ui/` - shadcn/ui コンポーネント
+  - `form/` - React Hook Form 連携のカスタムフォームコンポーネント
+- `apps/web/src/lib/` - ユーティリティと設定
+  - `supabase/` - Supabase クライアント設定（server.ts と browser.ts）
+  - `server-action.ts` - 型安全なサーバーアクションラッパー
+  - `result.ts` - エラーハンドリング用の Result 型
+- `src/app/` - Next.js App Router のページとレイアウト
   - `(card-layout)/` - 公開認証ページ（ログイン、登録、パスワードリセット）
   - `admin/` - 保護された管理画面（ユーザー管理機能付き）
 - `src/components/` - 再利用可能なコンポーネント
-  - `ui/` - shadcn/uiコンポーネント
-  - `form/` - React Hook Form連携のカスタムフォームコンポーネント
+  - `ui/` - shadcn/ui コンポーネント
+  - `form/` - React Hook Form 連携のカスタムフォームコンポーネント
 - `src/lib/` - ユーティリティと設定
-  - `supabase/` - Supabaseクライアント設定（server.tsとbrowser.ts）
+  - `supabase/` - Supabase クライアント設定（server.ts と browser.ts）
   - `server-action.ts` - 型安全なサーバーアクションラッパー
-  - `result.ts` - エラーハンドリング用のResult型
 
 ### 認証フロー
 
-- Supabase Authによるメール/パスワード認証
+- Supabase Auth によるメール/パスワード認証
 - ミドルウェア（`src/app/middleware.ts`）でセッション管理
 - 一般ユーザー（`/login`）と管理者（`/admin/login`）で別フロー
 - 保護されたルートは自動的にログインページへリダイレクト
@@ -87,8 +96,20 @@ pnpm test:e2e    # Playwright E2Eテストを実行
 
 - ケバブケース
 - ブラウザテストは `*.browser.test.ts`
-- Nodeテストは `*.node.test.ts`
-- E2Eテストは `*.e2e.test.ts`
+- Node テストは `*.node.test.ts`
+- E2E テストは `*.e2e.test.ts`
+
+### Enum
+
+- 変数名もプロパティ名もパスカルケース
+  例:
+
+```ts
+const Foo = {
+  Bar: "bar",
+  Baz: "baz",
+};
+```
 
 ### コンポーネント
 
@@ -99,11 +120,12 @@ pnpm test:e2e    # Playwright E2Eテストを実行
 ### 共通
 
 - ファイル配置はコロケーションを最優先とする
-- 共通で使うものはcomponentsに切り出し共通利用する
-- interfaceよりtypeを優先する
-- classNameの動的な統合はcn関数を使用する
+- 共通で使うものは components に切り出し共通利用する
+- interface より type を優先する
+- className の動的な統合は cn 関数を使用する
 - エラーメッセージは日本語で表示
 - 関数定義時の型は常に明示する
+- TypeScript の enum は利用せず const オブジェクトを利用する
 
 ### フロントエンド
 
@@ -183,7 +205,7 @@ function parseParams(params: unknown) {
   const result = v.safeParse(
     v.object({
       foo: v.string(),
-    }),
+    })
   );
 
   if (!result.success) {
@@ -197,7 +219,7 @@ function parseSearchParams(searchParams: unknown) {
   const result = v.safeParse(
     v.object({
       bar: v.string(),
-    }),
+    })
   );
 
   if (!result.success) {
@@ -264,13 +286,13 @@ _actions/
 
 ### コンポーネントテスト
 
-- スタイルはVRTで行うためコンポーネントテストから除外する
-  - classNameの付与されているかのテストなど
+- スタイルは VRT で行うためコンポーネントテストから除外する
+  - className の付与されているかのテストなど
 - クライアントコンポーネント、もしくはユニバーサルコンポーネントを対象とする
-  - asyncコンポーネントをRSCと判定する
+  - async コンポーネントを RSC と判定する
 - テストの対象と同じ階層に配置する
 - 結合テストはなるべく上位のコンポーネントから行い、多くが結合した状態で実施する
-- Mockは最小限にする
+- Mock は最小限にする
 - 原則としてアクセシビリティによるクエリのみを使用する
 
 ### E2E
@@ -280,7 +302,7 @@ _actions/
 
 ### VRT
 
-- Playwrightを使用
+- Playwright を使用
 
 ## 開発方法
 
@@ -291,8 +313,8 @@ _actions/
 
 ### 補足
 
-- lintエラーの修正は2回試みて治らなかったらユーザーに相談する
-- テストを2回実施・修正しても通らなかったらユーザーに相談する
+- lint エラーの修正は 2 回試みて治らなかったらユーザーに相談する
+- テストを 2 回実施・修正しても通らなかったらユーザーに相談する
 
 ## 他
 
