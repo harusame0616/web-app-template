@@ -4,7 +4,14 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"dev": "pnpm --filter '*' run dev"
+		"dev": "turbo dev",
+		"build": "turbo build",
+		"lint:check": "turbo lint:check",
+		"format:check": "turbo format:check",
+		"type:check": "turbo type:check",
+		"test": "turbo test",
+		"test:e2e": "turbo test:e2e",
+		"db:reset": "turbo db:reset"
 	},
 	"keywords": [],
 	"author": "",

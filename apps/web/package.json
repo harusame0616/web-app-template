@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@9.15.2",
-  "scripts": {
+    "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
@@ -11,8 +11,13 @@
     "lint:fix": "next lint --fix",
     "format:check": "prettier --check ./src",
     "format:fix": "prettier --write ./src",
+    "type:check": "tsc --noEmit",
     "test": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:e2e:line-reporter": "playwright test --reporter=line",
+    "test:e2e:list-reporter": "playwright test --reporter=list",
+    "db:reset": "prisma migrate reset",
+    "db:generate": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "catalog:",
