@@ -3,7 +3,7 @@ import {
   ChevronsUpDownIcon,
   LockKeyholeIcon,
   LogOutIcon,
-  User,
+  User
 } from "lucide-react";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -24,7 +24,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -67,10 +66,10 @@ export function SideMenuPresenter(
 ) {
   return (
     <Sidebar>
-      <SidebarHeader>Admin</SidebarHeader>
+      <SidebarHeader>管理メニュー</SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Menus</SidebarGroupLabel>
+          {/* <SidebarGroupLabel>その他</SidebarGroupLabel> */}
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -139,7 +138,7 @@ function UserMiniProfile(props: UserMiniProfileProps) {
       <Avatar>
         <Image src={UserImage} alt={""} />
         <AvatarFallback>
-          {props.skeleton ? "" : props.name?.at(0) ?? "no name"}
+          {props.skeleton ? "" : (props.name?.at(0) ?? "no name")}
         </AvatarFallback>
       </Avatar>
       <div className="grid grid-rows-2 font-normal">

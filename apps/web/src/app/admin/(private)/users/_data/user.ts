@@ -1,23 +1,17 @@
-import * as v from "valibot";
-
+import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
-
-import { Role, roleSchema } from "../role";
-
-const userMetadataSchema = v.object({
-  name: v.optional(v.string(), ""),
-  role: v.optional(roleSchema, () => Role.Viewer.value),
-});
 
 export type User = {
   userId: string;
   name: string;
   email: string;
-  role: Role;
+  role: "admin" | "operator" | "viewer";
 };
 export async function getUsers(page: number) {
   const supabase = await createClient();
   const perPage = 10;
+
+  // 全認証ユーザーを取得
   const listUsersResult = await supabase.auth.admin.listUsers({
     page,
     perPage,
@@ -27,16 +21,27 @@ export async function getUsers(page: number) {
     throw new Error(listUsersResult.error.message);
   }
 
+  // DBからユーザー情報を取得
+  const dbUsers = await prisma.user.findMany({});
+  const dbUserMap = new Map(dbUsers.map((u) => [u.userId, u]));
+
+  // DBに存在するユーザーのみをフィルタリング
+  const filteredUsers = listUsersResult.data.users.filter((authUser) => {
+    const userId = authUser.user_metadata?.userId;
+    return userId && dbUserMap.has(userId);
+  });
+
   return {
-    users: listUsersResult.data.users.map(
-      ({ email, id: userId, user_metadata: userMetadata }) => {
-        return {
-          userId,
-          email: v.parse(v.string(), email),
-          ...v.parse(userMetadataSchema, userMetadata),
-        };
-      },
-    ),
-    totalPage: Math.ceil(listUsersResult.data.total / perPage),
+    users: filteredUsers.map((authUser) => {
+      const userId = authUser.user_metadata.userId;
+      const dbUser = dbUserMap.get(userId)!;
+      return {
+        userId: dbUser.userId,
+        name: dbUser.name,
+        email: authUser.email ?? "",
+        role: "admin" as const,
+      };
+    }),
+    totalPage: Math.ceil(filteredUsers.length / perPage),
   };
 }

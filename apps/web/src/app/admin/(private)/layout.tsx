@@ -3,6 +3,7 @@ import { PropsWithChildren, ReactNode, Suspense } from "react";
 
 import { AppName } from "@/app-info";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 
 import { SideMenuContainer, SideMenuPresenter } from "./side-menu";
 
@@ -29,6 +30,7 @@ export default function Layout({
         </div>
         <div className="overflow-y-auto p-4">{children}</div>
       </main>
+      <Toaster />
     </SidebarProvider>
   );
 }

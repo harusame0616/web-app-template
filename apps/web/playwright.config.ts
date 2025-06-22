@@ -34,19 +34,33 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    // Setup projects for authentication
+    { name: "admin-setup", testMatch: /admin\.setup\.ts/ },
+    { name: "user-setup", testMatch: /user\.setup\.ts/ },
+
+    // Admin pages tests
     {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      name: "admin",
+      testMatch: /admin\/.*\.e2e\.test\.ts/,
+      use: { 
+        ...devices["Desktop Chrome"],
+        // Use prepared admin auth state.
+        storageState: ".auth/admin-auth.json",
+      },
+      dependencies: ["admin-setup"],
     },
 
+    // User pages tests (punch, etc.)
     {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-    },
-
-    {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
+      name: "user",
+      testMatch: /(?<!admin\/).*\.e2e\.test\.ts/,
+      testIgnore: /admin\/.*\.e2e\.test\.ts/,
+      use: { 
+        ...devices["Desktop Chrome"],
+        // Use prepared user auth state.
+        storageState: ".auth/user-auth.json",
+      },
+      dependencies: ["user-setup"],
     },
 
     /* Test against mobile viewports. */

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@9.15.2",
-    "scripts": {
+  "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "@hookform/resolvers": "catalog:",
+    "@prisma/client": "catalog:",
+    "@radix-ui/react-accordion": "catalog:",
     "@radix-ui/react-alert-dialog": "catalog:",
     "@radix-ui/react-avatar": "catalog:",
     "@radix-ui/react-checkbox": "catalog:",
@@ -41,10 +43,12 @@
     "date-fns": "catalog:",
     "lucide-react": "catalog:",
     "next": "catalog:",
+    "next-themes": "catalog:",
     "react": "catalog:",
     "react-day-picker": "catalog:",
     "react-dom": "catalog:",
     "react-hook-form": "catalog:",
+    "sonner": "catalog:",
     "tailwind-merge": "catalog:",
     "tailwindcss-animate": "catalog:",
     "uuidv7": "catalog:",
@@ -74,8 +78,13 @@
     "neostandard": "catalog:",
     "postcss": "catalog:",
     "prettier": "catalog:",
+    "prisma": "catalog:",
     "tailwindcss": "catalog:",
+    "tsx": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }

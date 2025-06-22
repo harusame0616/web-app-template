@@ -5,6 +5,7 @@ import { Geist, Geist_Mono as GeistMono } from "next/font/google";
 import { ReactNode } from "react";
 
 import { AppName } from "@/app-info";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );

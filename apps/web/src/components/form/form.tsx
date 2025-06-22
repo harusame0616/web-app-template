@@ -22,10 +22,10 @@ export function FormItem({
   return (
     <ShadcnFormItem>
       <div className="flex flex-col gap-px">
-        <FormLabel className="flex items-center gap-1">
-          <div className="font-bold">{label}</div>
+        <FormLabel className="flex items-center gap-1 mb-1">
+          <div className="font-bold mt-[2px] ">{label}</div>
           {required && (
-            <div className="rounded-lg border border-destructive px-2 text-xs text-destructive">
+            <div className="rounded-lg border border-destructive/40 px-2 text-xs text-destructive/80">
               必須
             </div>
           )}

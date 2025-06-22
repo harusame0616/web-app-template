@@ -46,6 +46,9 @@ const eslintConfig = [
     ...playwright.configs["flat/recommended"],
     files: ["e2e/**/*.e2e.test.ts"],
   },
+  {
+    ignores: ["src/generated/prisma/**/*"],
+  },
 ];
 
 export default eslintConfig;
