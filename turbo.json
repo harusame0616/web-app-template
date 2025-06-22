@@ -11,8 +11,12 @@
         "SUPABASE_SERVICE_ROLE_KEY"
       ]
     },
-    "lint:check": {},
-    "lint:fix": {},
+    "lint:check": {
+      "dependsOn": ["db:generate"]
+    },
+    "lint:fix": {
+      "dependsOn": ["db:generate"]
+    },
     "format:check": {},
     "format:fix": {},
     "type:check": {},
