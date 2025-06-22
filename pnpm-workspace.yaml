@@ -57,6 +57,7 @@ catalog:
   tailwind-merge: 2.5.5
   tailwindcss: 4.1.8
   tailwindcss-animate: 1.0.7
+  turbo: 2.5.4
   typescript: "5"
   uuidv7: 1.0.2
   valibot: 1.0.0-beta.9
