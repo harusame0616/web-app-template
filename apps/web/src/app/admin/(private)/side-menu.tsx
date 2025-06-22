@@ -3,7 +3,7 @@ import {
   ChevronsUpDownIcon,
   LockKeyholeIcon,
   LogOutIcon,
-  User
+  User,
 } from "lucide-react";
 import Image from "next/image";
 import { redirect } from "next/navigation";
