@@ -11,7 +11,8 @@
 		"type:check": "turbo type:check",
 		"test": "turbo test",
 		"test:e2e": "turbo test:e2e",
-		"db:reset": "turbo db:reset"
+		"db:reset": "turbo db:reset",
+		"db:generate": "turbo db:generate"
 	},
 	"keywords": [],
 	"author": "",

@@ -2,7 +2,7 @@
   "$schema": "https://turborepo.com/schema.json",
   "tasks": {
     "build": {
-      "dependsOn": ["db:generate"],
+      "dependsOn": ["^db:generate"],
       "outputs": [".next/**", "!.next/cache/**"],
       "env": [
         "DATABASE_URL",
@@ -12,16 +12,17 @@
       ]
     },
     "lint:check": {
-      "dependsOn": ["db:generate"]
+      "dependsOn": ["^db:generate"]
     },
     "lint:fix": {
-      "dependsOn": ["db:generate"]
+      "dependsOn": ["^db:generate"]
     },
     "format:check": {},
     "format:fix": {},
-    "type:check": {},
-    "test": {
+    "type:check": {
+      "dependsOn": ["^db:generate"]
     },
+    "test": {},
     "test:e2e": {
       "env": [
         "DATABASE_URL",
@@ -39,6 +40,14 @@
       ]
     },
     "db:generate": {
+      "cache": false,
+      "env": ["DATABASE_URL", "DIRECT_URL"]
+    },
+    "db:migrate": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:deploy": {
       "cache": false
     },
     "db:reset": {

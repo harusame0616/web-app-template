@@ -15,13 +15,11 @@
     "test": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:line-reporter": "playwright test --reporter=line",
-    "test:e2e:list-reporter": "playwright test --reporter=list",
-    "db:reset": "prisma migrate reset",
-    "db:generate": "prisma generate"
+    "test:e2e:list-reporter": "playwright test --reporter=list"
   },
   "dependencies": {
+    "@harusame.dev/database": "workspace:*",
     "@hookform/resolvers": "catalog:",
-    "@prisma/client": "catalog:",
     "@radix-ui/react-accordion": "catalog:",
     "@radix-ui/react-alert-dialog": "catalog:",
     "@radix-ui/react-avatar": "catalog:",
@@ -78,13 +76,9 @@
     "neostandard": "catalog:",
     "postcss": "catalog:",
     "prettier": "catalog:",
-    "prisma": "catalog:",
     "tailwindcss": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
   }
 }

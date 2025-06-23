@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@harusame.dev/database";
 import { createClient } from "@/lib/supabase/server";
 
 export type User = {
