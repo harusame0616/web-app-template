@@ -1,13 +1,37 @@
 {
-  "name": "harusame.dev@ai",
+  "name": "@harusame.dev/ai",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsc --watch",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.6.2"
+  "packageManager": "pnpm@10.6.2",
+  "exports": {
+    "./agents": {
+      "types": "./src/agents/index.ts",
+      "default": "./dist/agents/index.js"
+    },
+    "./tools": {
+      "types": "./src/tools/index.ts",
+      "default": "./dist/tools/index.js"
+    },
+    "./workflows": {
+      "types": "./src/workflows/index.ts",
+      "default": "./dist/workflows/index.js"
+    }
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "catalog:",
+    "@mastra/core": "catalog:",
+    "@mastra/libsql": "catalog:",
+    "@mastra/loggers": "catalog:",
+    "@mastra/memory": "catalog:",
+    "mastra": "catalog:",
+    "zod": "catalog:"
+  }
 }

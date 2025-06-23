@@ -1,9 +1,8 @@
-
-import { Mastra } from '@mastra/core/mastra';
-import { PinoLogger } from '@mastra/loggers';
-import { LibSQLStore } from '@mastra/libsql';
-import { weatherWorkflow } from './workflows/weather-workflow';
-import { weatherAgent } from './agents/weather-agent';
+import { Mastra } from "@mastra/core/mastra";
+import { PinoLogger } from "@mastra/loggers";
+import { LibSQLStore } from "@mastra/libsql";
+import { weatherWorkflow } from "@harusame.dev/ai/workflows";
+import { weatherAgent } from "@harusame.dev/ai/agents";
 
 export const mastra = new Mastra({
   workflows: { weatherWorkflow },
@@ -13,7 +12,7 @@ export const mastra = new Mastra({
     url: ":memory:",
   }),
   logger: new PinoLogger({
-    name: 'Mastra',
-    level: 'info',
+    name: "Mastra",
+    level: "info",
   }),
 });

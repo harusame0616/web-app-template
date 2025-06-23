@@ -1,5 +1,5 @@
 {
-  "name": "harusame.dev@mastra",
+  "name": "@harusame.dev/mastra",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,7 @@
     "@mastra/libsql": "catalog:",
     "@mastra/loggers": "catalog:",
     "@mastra/memory": "catalog:",
+    "@harusame.dev/ai": "workspace:*",
     "zod": "catalog:"
   },
   "devDependencies": {
