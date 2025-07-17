@@ -1,7 +1,9 @@
 "use client";
 
 import { valibotResolver } from "@hookform/resolvers/valibot";
+import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Form, FormItem } from "@/components/form/form";
@@ -14,11 +16,12 @@ import { loginFormSchema, type LoginFormValues } from "./login-form-schema";
 
 export function LoginForm() {
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
   const form = useForm<LoginFormValues>({
     resolver: valibotResolver(loginFormSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "yamada@example.com",
+      password: "demo-system",
     },
   });
 
@@ -63,17 +66,34 @@ export function LoginForm() {
           render={({ field }) => (
             <FormItem label="パスワード" required>
               <FormControl>
-                <Input {...field} type="password" />
+                <div className="relative">
+                  <Input
+                    {...field}
+                    type={showPassword ? "text" : "password"}
+                    className="pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:opacity-70"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </button>
+                </div>
               </FormControl>
             </FormItem>
           )}
         />
-        <a
+        {/* <a
           href="/admin/reset"
           className="text-sm underline-offset-4 hover:underline text-muted-foreground hover:text-primary"
         >
           パスワードをお忘れですか？
-        </a>
+        </a> */}
       </div>
     </Form>
   );
