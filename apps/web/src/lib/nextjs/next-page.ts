@@ -1,8 +1,8 @@
-type NextPagePropsParam = {
+type SearchParams = {
   [key: string]: string | string[] | undefined;
 };
 
 export type NextPageProps = {
-  params: Promise<NextPagePropsParam>;
-  searchParams: Promise<NextPagePropsParam>;
+  params: Promise<Record<string, string | undefined>>;
+  searchParams: Promise<SearchParams>;
 };
