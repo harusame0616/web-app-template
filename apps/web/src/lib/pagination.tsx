@@ -1,3 +1,7 @@
+"use client";
+
+import { useSearchParams } from "next/navigation";
+
 import {
   Pagination as ShadcnPagination,
   PaginationContent,
@@ -11,10 +15,10 @@ import {
 type Props = {
   page: number;
   totalPage: number;
-  searchParams: Record<string, string | string[] | undefined>;
 };
 
-export function Pagination({ totalPage, page, searchParams }: Props) {
+export function Pagination({ totalPage, page }: Props) {
+  const searchParams = useSearchParams();
   const pageDisplayCount = 2;
   const beforePages = Array.from({ length: pageDisplayCount })
     .map((_, index) => page - (index + 1))
@@ -26,19 +30,11 @@ export function Pagination({ totalPage, page, searchParams }: Props) {
   const beforeFirstPage = beforePages.at(0);
   const afterLastPage = afterPages.at(-1);
   const urlSearchParams = new URLSearchParams();
-  for (const [key, value] of Object.entries(searchParams)) {
-    if (key === "page") {
-      continue;
+  searchParams.forEach((value, key) => {
+    if (key !== "page") {
+      urlSearchParams.append(key, value);
     }
-
-    if (Array.isArray(value)) {
-      value.forEach((v) => urlSearchParams.append(key, v));
-    } else if (value !== undefined) {
-      urlSearchParams.set(key, value);
-    } else {
-      // do nothing
-    }
-  }
+  });
   function generatePageLink(page: number) {
     const linkSearchParams = new URLSearchParams(urlSearchParams);
     linkSearchParams.set("page", page.toString());
