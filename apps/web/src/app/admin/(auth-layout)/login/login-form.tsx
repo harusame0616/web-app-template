@@ -27,8 +27,10 @@ export function LoginForm() {
 
   const onSubmit = async (data: LoginFormValues) => {
     await handleServerAction(loginAction(data), {
-      onSuccess: () => {
+      onSuccess: async () => {
         router.push("/admin");
+        // ルーティングが終わるまで処中にするため解決しない Promise を生成
+        await new Promise((_) => {});
       },
       onFailure: (message) => {
         form.setError("root", {
