@@ -19,16 +19,16 @@ export default function Layout({
   title,
 }: PropsWithChildren<{ title?: ReactNode }>) {
   return (
-    <SidebarProvider className="flex">
+    <SidebarProvider className="flex" defaultOpen={false}>
       <Suspense fallback={<SideMenuPresenter skeleton />}>
         <SideMenuContainer />
       </Suspense>
       <main className="grid grow grid-rows-[auto_1fr]">
-        <div className="grid grid-cols-[auto_1fr] items-center">
+        <div className="grid grid-cols-[auto_1fr] items-center px-4 h-12">
           <SidebarTrigger />
-          <h1 className="p-2">{title}</h1>
+          {title}
+          <div className="mx-4"></div>
         </div>
-        <div className="overflow-y-auto p-4">{children}</div>
       </main>
       <Toaster />
     </SidebarProvider>

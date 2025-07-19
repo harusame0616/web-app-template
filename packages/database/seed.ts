@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { PrismaClient } from "../src/generated/prisma";
+import { PrismaClient } from "./src/generated/prisma";
 import { testUsers } from "./fixtures/users";
 
 const prisma = new PrismaClient();
@@ -9,7 +9,7 @@ async function main() {
     // Supabase Authクライアントを作成
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
     // 既存の認証ユーザーを削除
@@ -24,7 +24,7 @@ async function main() {
 
     for (const user of existingUsers || []) {
       const { error: deleteError } = await supabase.auth.admin.deleteUser(
-        user.id,
+        user.id
       );
       if (deleteError) {
         console.error(`Failed to delete user ${user.email}:`, deleteError);

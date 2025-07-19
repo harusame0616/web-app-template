@@ -11,10 +11,12 @@
     "db:deploy": "prisma migrate deploy"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./fixtures/*": "./fixtures/*.ts"
   },
   "dependencies": {
     "@prisma/client": "catalog:",
+    "@supabase/supabase-js": "catalog:",
     "@types/node": "catalog:"
   },
   "devDependencies": {
