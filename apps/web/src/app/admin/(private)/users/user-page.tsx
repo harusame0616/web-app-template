@@ -1,5 +1,7 @@
 import { Suspense } from "react";
 
+import { AdminPageLayout } from "@/components/admin-page-layout";
+
 import { ExportButton } from "./export-button";
 import { UserAddDialog } from "./user-add-dialog";
 import { UsersTableContainer } from "./users-table-container";
@@ -11,14 +13,18 @@ type UsersPageProps = {
 };
 export function UsersPage({ page, searchParams }: UsersPageProps) {
   return (
-    <div>
-      <div className="flex justify-end gap-2">
-        <ExportButton />
-        <UserAddDialog />
-      </div>
+    <AdminPageLayout
+      title="ユーザー一覧"
+      toolBar={
+        <>
+          <ExportButton />
+          <UserAddDialog />
+        </>
+      }
+    >
       <Suspense fallback={<UsersTablePresenter page={page} skeleton />}>
         <UsersTableContainer page={page} searchParams={searchParams} />
       </Suspense>
-    </div>
+    </AdminPageLayout>
   );
 }

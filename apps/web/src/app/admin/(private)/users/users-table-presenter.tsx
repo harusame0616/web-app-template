@@ -4,7 +4,6 @@ import { Edit, Trash } from "lucide-react";
 import { useState } from "react";
 
 import { AlertDialog } from "@/components/alert-dialog";
-import { Pagination } from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -28,6 +27,7 @@ import {
 import { deleteUserAction } from "./_actions";
 import { User } from "./_data/user";
 import { UserEditDialog } from "./user-edit-dialog";
+import { Pagination } from "@/lib/pagination";
 
 type UsersTablePresenterProps =
   | {
@@ -147,7 +147,6 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
         <Pagination
           page={page}
           totalPage={totalPage}
-          searchParams={searchParams}
         />
       </div>
 
