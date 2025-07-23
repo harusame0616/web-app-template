@@ -6,7 +6,7 @@ export async function handleServerAction<T>(
     onSuccess,
     onFailure,
   }: {
-    onSuccess?: (data?: T) => void | Promise<void>;
+    onSuccess?: (data: T) => void | Promise<void>;
     onFailure?: (message: string) => void | Promise<void>;
   },
 ): Promise<void> {
