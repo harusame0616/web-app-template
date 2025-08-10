@@ -5,6 +5,7 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
+    "db:start": "pnpm dlx supabase start",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --skip-generate",
     "db:reset": "prisma migrate reset --force",
