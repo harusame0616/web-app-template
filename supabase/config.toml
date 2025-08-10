@@ -258,8 +258,9 @@ inspector_port = 60083
 # Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
 # entrypoint = "./functions/MY_FUNCTION_NAME/index.ts"
 
+# colima を利用すると動作しないため false に設定
 [analytics]
-enabled = true
+enabled = false
 port = 60027
 # Configure one of the supported backends: `postgres`, `bigquery`.
 backend = "postgres"
