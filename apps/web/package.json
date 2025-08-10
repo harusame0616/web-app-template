@@ -4,7 +4,7 @@
   "private": true,
   "packageManager": "pnpm@9.15.2",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "TZ=UTC next dev --turbopack --port 60000",
     "build": "next build",
     "start": "next start",
     "lint:check": "next lint",
