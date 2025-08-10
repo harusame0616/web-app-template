@@ -57,7 +57,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "catalog:",
     "@playwright/test": "catalog:",
-    "@prisma/nextjs-monorepo-workaround-plugin": "6.12.0",
+    "@prisma/nextjs-monorepo-workaround-plugin": "6.13.0",
     "@tailwindcss/postcss": "catalog:",
     "@testing-library/dom": "catalog:",
     "@testing-library/jest-dom": "catalog:",
