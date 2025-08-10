@@ -7,7 +7,7 @@
   "scripts": {
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --skip-generate",
-    "db:reset": "prisma migrate reset",
+    "db:reset": "prisma migrate reset --force",
     "db:deploy": "prisma migrate deploy"
   },
   "exports": {
@@ -25,6 +25,6 @@
     "typescript": "catalog:"
   },
   "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx seed.ts"
   }
 }
