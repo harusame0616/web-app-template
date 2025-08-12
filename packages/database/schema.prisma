@@ -15,12 +15,3 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// 利用者データ
-model User {
-  userId    String   @id @default(cuid())
-  name      String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("users")
-}

@@ -1,4 +1,3 @@
-import { prisma } from "@harusame.dev/database";
 import { createClient } from "@/lib/supabase/server";
 
 export type User = {
@@ -21,27 +20,17 @@ export async function getUsers(page: number) {
     throw new Error(listUsersResult.error.message);
   }
 
-  // DBからユーザー情報を取得
-  const dbUsers = await prisma.user.findMany({});
-  const dbUserMap = new Map(dbUsers.map((u) => [u.userId, u]));
-
-  // DBに存在するユーザーのみをフィルタリング
-  const filteredUsers = listUsersResult.data.users.filter((authUser) => {
-    const userId = authUser.user_metadata?.userId;
-    return userId && dbUserMap.has(userId);
-  });
-
   return {
-    users: filteredUsers.map((authUser) => {
-      const userId = authUser.user_metadata.userId;
-      const dbUser = dbUserMap.get(userId)!;
+    users: listUsersResult.data.users.map((authUser) => {
       return {
-        userId: dbUser.userId,
-        name: dbUser.name,
+        userId: authUser.id,
+        name: (authUser.user_metadata?.name as string) ?? "",
         email: authUser.email ?? "",
-        role: "admin" as const,
+        role:
+          (authUser.user_metadata?.role as "admin" | "operator" | "viewer") ??
+          "viewer",
       };
     }),
-    totalPage: Math.ceil(filteredUsers.length / perPage),
+    totalPage: Math.ceil(listUsersResult.data.total / perPage),
   };
 }

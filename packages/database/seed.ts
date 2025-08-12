@@ -1,8 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { PrismaClient } from "./src/generated/prisma";
 import { testUsers } from "./fixtures/users";
-
-const prisma = new PrismaClient();
 
 async function main() {
   try {
@@ -32,31 +29,17 @@ async function main() {
       }
     }
 
-    // トランザクションで既存データをクリア
-    await prisma.$transaction([prisma.user.deleteMany()]);
-
-    const users = [];
+    // Supabase Authにユーザーを作成
     for (const userData of testUsers) {
-      // DBにユーザーを作成（userIdを指定）
-      const dbUser = await prisma.user.create({
-        data: {
-          userId: userData.userId,
-          name: userData.name,
-        },
-      });
-
       await supabase.auth.admin.createUser({
         email: userData.email,
         password: userData.password,
         email_confirm: true,
         user_metadata: {
           name: userData.name,
-          userId: userData.userId,
           role: "admin",
         },
       });
-
-      users.push(dbUser);
     }
   } catch (error) {
     console.error("シードデータの作成中にエラーが発生しました:", error);
@@ -68,7 +51,4 @@ main()
   .catch((e) => {
     console.error(e);
     process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
   });

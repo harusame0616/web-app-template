@@ -1,8 +1,9 @@
 import { Metadata } from "next";
 import * as v from "valibot";
 
-import { UsersPage } from "./user-page";
 import { NextPageProps } from "@/lib/nextjs/next-page";
+
+import { UsersPage } from "./user-page";
 
 export const metadata: Metadata = {
   title: "ユーザー一覧",

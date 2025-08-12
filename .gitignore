@@ -4,5 +4,5 @@ node_modules
 test-results
 playwright-report
 .turbo
-.local.json
+*.local.json
 .env

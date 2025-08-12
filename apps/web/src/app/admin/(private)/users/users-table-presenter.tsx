@@ -23,11 +23,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Pagination } from "@/lib/pagination";
 
 import { deleteUserAction } from "./_actions";
 import { User } from "./_data/user";
 import { UserEditDialog } from "./user-edit-dialog";
-import { Pagination } from "@/lib/pagination";
 
 type UsersTablePresenterProps =
   | {
@@ -144,10 +144,7 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
         </div>
       )}
       <div className="mt-4">
-        <Pagination
-          page={page}
-          totalPage={totalPage}
-        />
+        <Pagination page={page} totalPage={totalPage} />
       </div>
 
       {!!editionUser && (
