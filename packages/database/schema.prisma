@@ -15,3 +15,45 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model Thread {
+  threadId     String    @id @map("thread_id")
+  title        String    @db.VarChar(100)
+  authorName   String    @map("author_name") @db.VarChar(50)
+  content      String    @db.Text
+  passwordHash String?   @map("password_hash") @db.VarChar(255)
+  imageUrls    String[]  @map("image_urls")
+  videoIds     String[]  @map("video_ids")
+  deletedAt    DateTime? @map("deleted_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  lastPostedAt DateTime  @default(now()) @map("last_posted_at")
+
+  // リレーション
+  comments Comment[]
+
+  // インデックス
+  @@index([deletedAt, lastPostedAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
+  @@map("threads")
+}
+
+model Comment {
+  commentId     String    @id @map("comment_id")
+  threadId      String    @map("thread_id")
+  authorName    String    @map("author_name") @db.VarChar(50)
+  content       String    @db.Text
+  passwordHash  String?   @map("password_hash") @db.VarChar(255)
+  imageUrls     String[]  @map("image_urls")
+  videoIds      String[]  @map("video_ids")
+  deletedAt     DateTime? @map("deleted_at")
+  commentNumber Int       @map("comment_number")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  thread Thread @relation(fields: [threadId], references: [threadId], onDelete: Cascade)
+
+  @@unique([threadId, commentNumber])
+  @@index([threadId, commentNumber])
+  @@index([threadId, deletedAt, createdAt])
+  @@map("comments")
+}
