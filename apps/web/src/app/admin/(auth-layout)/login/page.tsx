@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-import { AdminLoginPage } from "./admin-login-page";
+import { AdminLoginPage } from "@/features/auth/login/admin-login-page";
 
 export const metadata: Metadata = {
   title: "ログイン",

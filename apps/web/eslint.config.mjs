@@ -22,6 +22,9 @@ const eslintConfig = [
         rootDir: "apps/web",
       },
     },
+    rules: {
+      "@next/next/no-html-link-for-pages": "off",
+    },
   }),
   // ...tailwind.configs["flat/recommended"], // TODO: Tailwind CSS v4との互換性問題により一時的に無効化
   ...neostandard({ noStyle: true, noJsx: true }),

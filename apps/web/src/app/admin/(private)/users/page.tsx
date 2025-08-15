@@ -1,27 +1,24 @@
 import { Metadata } from "next";
 import * as v from "valibot";
 
-import { NextPageProps } from "@/lib/nextjs/next-page";
-
-import { UsersPage } from "./user-page";
+import { UsersPage } from "@/features/user/list/users-page";
+import { NextPageProps, SearchParams } from "@/lib/nextjs/next-page";
 
 export const metadata: Metadata = {
   title: "ユーザー一覧",
 };
 
-const searchParamsSchema = v.object({
-  page: v.optional(v.pipe(v.string(), v.transform(Number)), () => "1"),
-});
-
 export default async function NextPage({ searchParams }: NextPageProps) {
-  const searchParamsAwaited = await searchParams;
-  const searchParamsResult = v.safeParse(
-    searchParamsSchema,
-    searchParamsAwaited,
-  );
-  const { page } = searchParamsResult.success
-    ? searchParamsResult.output
-    : { page: 1 };
+  const { page } = await parseSearchParams(searchParams);
 
-  return <UsersPage page={page} searchParams={searchParamsAwaited} />;
+  return <UsersPage page={page} />;
+}
+
+async function parseSearchParams(searchParams: SearchParams) {
+  return v.parse(
+    v.object({
+      page: v.optional(v.pipe(v.string(), v.transform(Number)), () => "1"),
+    }),
+    await searchParams,
+  );
 }

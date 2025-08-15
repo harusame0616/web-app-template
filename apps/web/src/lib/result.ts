@@ -1,17 +1,16 @@
-export type Success<Data = {}> = { success: true; data: Data };
+export type Success<Data = undefined> = {
+  success: true;
+  data: Data;
+};
 export type Failure = { success: false; message: string };
-export type Result<Data = {}> = Success<Data> | Failure;
+export type Result<Data = Record<string, unknown>> = Success<Data> | Failure;
 
-export function succeed(): Success<{}>;
-export function succeed<Data extends Record<string, any>>(
+export function succeed(): Success<undefined>;
+export function succeed<Data extends Record<string, unknown>>(
   data: Data,
 ): Success<Data>;
-export function succeed(data?: any) {
-  if (data) {
-    return { success: true, data: {} };
-  }
-
-  return { success: true, data };
+export function succeed(data?: Record<string, unknown>) {
+  return { success: true, data: data || undefined };
 }
 
 export function fail(message?: string): Failure {

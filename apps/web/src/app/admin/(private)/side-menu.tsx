@@ -2,7 +2,6 @@ import {
   AtSign,
   ChevronsUpDownIcon,
   LockKeyholeIcon,
-  LogOutIcon,
   User,
 } from "lucide-react";
 import Image from "next/image";
@@ -30,6 +29,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { LogoutButton } from "@/features/auth/logout/logout-button";
 import { createClient } from "@/lib/supabase/server";
 
 import UserImage from "./user.png";
@@ -116,12 +116,9 @@ export function SideMenuPresenter(
               メールアドレス更新
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <Link href="/admin/logout">
-              <DropdownMenuItem>
-                <LogOutIcon />
-                ログアウト
-              </DropdownMenuItem>
-            </Link>
+            <DropdownMenuItem asChild>
+              <LogoutButton />
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarFooter>
