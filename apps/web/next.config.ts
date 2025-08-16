@@ -11,6 +11,15 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+        pathname: "/**",
+      },
+    ],
+  },
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.plugins = [...config.plugins, new PrismaPlugin()];

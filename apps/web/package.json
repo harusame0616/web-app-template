@@ -39,6 +39,7 @@
     "class-variance-authority": "catalog:",
     "clsx": "catalog:",
     "date-fns": "catalog:",
+    "embla-carousel-react": "8.6.0",
     "jotai": "catalog:",
     "lucide-react": "catalog:",
     "next": "catalog:",

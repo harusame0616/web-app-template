@@ -1,5 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
+import { PrismaClient } from "./src/generated/prisma";
+import { testThreads, testThreadComments } from "./fixtures/threads";
 import { testUsers } from "./fixtures/users";
+
+const prisma = new PrismaClient();
 
 async function main() {
   try {
@@ -41,9 +45,63 @@ async function main() {
         },
       });
     }
+
+    // 既存のスレッドデータを削除（コメントも自動的に削除される）
+    await prisma.thread.deleteMany();
+
+    // スレッドデータを作成
+    for (const threadData of testThreads) {
+      await prisma.thread.create({
+        data: threadData,
+      });
+    }
+
+    // コメントデータを作成
+    let commentNumber = 1;
+    for (const commentData of testThreadComments) {
+      const thread = await prisma.thread.findUnique({
+        where: { threadId: commentData.threadId },
+        include: {
+          _count: {
+            select: {
+              comments: {
+                where: { deletedAt: null },
+              },
+            },
+          },
+        },
+      });
+
+      if (thread) {
+        await prisma.comment.create({
+          data: {
+            commentId: commentData.commentId,
+            threadId: commentData.threadId,
+            authorName: commentData.authorName,
+            content: commentData.content,
+            imageUrls: commentData.imageUrls || [],
+            videoIds: commentData.videoIds || [],
+            commentNumber: thread._count.comments + 1,
+            createdAt: commentData.createdAt,
+          },
+        });
+
+        // スレッドの最終投稿日時を更新
+        await prisma.thread.update({
+          where: { threadId: commentData.threadId },
+          data: {
+            lastPostedAt: commentData.createdAt,
+          },
+        });
+      }
+    }
+
+    console.log("スレッドとコメントのシードデータを作成しました");
   } catch (error) {
     console.error("シードデータの作成中にエラーが発生しました:", error);
     throw error;
+  } finally {
+    await prisma.$disconnect();
   }
 }
 

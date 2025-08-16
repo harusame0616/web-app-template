@@ -31,7 +31,7 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="ja" className="h-full">
+    <html lang="ja" className="h-full [scrollbar-gutter:stable]">
       <body
         className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       >
