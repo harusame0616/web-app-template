@@ -715,7 +715,6 @@ export const testThreadComments = [
     imageUrls: [],
     videoIds: [],
     createdAt: new Date("2024-12-20T15:30:00Z"),
-    isDeleted: true,
   },
   {
     threadId: "thread-027",
@@ -734,7 +733,6 @@ export const testThreadComments = [
     imageUrls: [],
     videoIds: [],
     createdAt: new Date("2024-12-20T16:30:00Z"),
-    isDeleted: true,
   },
   {
     threadId: "thread-027",
@@ -1026,7 +1024,6 @@ export const testThreads = [
     videoIds: [],
     lastPostedAt: new Date("2024-12-21T10:00:00Z"),
     createdAt: new Date("2024-12-21T10:00:00Z"),
-    isDeleted: true,
   },
   {
     threadId: "thread-027",
