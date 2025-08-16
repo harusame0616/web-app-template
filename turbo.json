@@ -2,13 +2,20 @@
   "$schema": "https://turborepo.com/schema.json",
   "tasks": {
     "build": {
-      "dependsOn": ["^db:start", "^db:generate"],
+      "dependsOn": ["^db:generate"],
       "outputs": [".next/**", "!.next/cache/**"],
       "env": [
         "DATABASE_URL",
         "DIRECT_URL",
         "SUPABASE_ANON_KEY",
-        "SUPABASE_SERVICE_ROLE_KEY"
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "NEXT_PUBLIC_APP_URL",
+        "NEXT_PUBLIC_AUTH_IS_FORGET_PASSWORD_ENABLED",
+        "CLOUDFLARE_ACCOUNT_ID",
+        "CLOUDFLARE_STREAM_CUSTOMER_CODE",
+        "CLOUDFLARE_API_TOKEN"
       ]
     },
     "lint:check": {
