@@ -1,4 +1,5 @@
-import { fail, succeed } from "@/lib/result";
+import { fail, succeed } from "@workspace/libs/result";
+
 import { createClient } from "@/lib/supabase/server";
 
 type LoginParams = { email: string; password: string };

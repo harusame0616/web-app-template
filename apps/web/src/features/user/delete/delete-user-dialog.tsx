@@ -1,9 +1,9 @@
 "use client";
 
+import { DropdownMenuItem } from "@workspace/ui/components/dropdown-menu";
 import { Trash } from "lucide-react";
 
 import { AlertDialog } from "@/components/alert-dialog";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 import { User } from "../common/user";
 import { deleteUserAction } from "./actions";

@@ -1,8 +1,9 @@
 "use client";
 
+import { FormControl, FormField } from "@workspace/ui/components/form";
+import { Input } from "@workspace/ui/components/input";
+
 import { Form, FormItem } from "@/components/form";
-import { FormControl, FormField } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 
 import { useUpdatePasswordForm } from "./use-update-password-form";
 

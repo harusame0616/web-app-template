@@ -1,14 +1,14 @@
 "use client";
 
 import { valibotResolver } from "@hookform/resolvers/valibot";
+import { FormControl, FormField } from "@workspace/ui/components/form";
+import { Input } from "@workspace/ui/components/input";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
 
 import { Form, FormItem } from "@/components/form/form";
-import { FormControl, FormField } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { emailSchema, passwordSchema } from "@/domains/user/schema";
 
 import { PasswordInput } from "./password-input";

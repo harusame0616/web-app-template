@@ -6,3 +6,9 @@ playwright-report
 .turbo
 *.local.json
 .env
+.vercel
+.aut
+.branches
+.temp
+
+**/*/generated/prisma

@@ -36,8 +36,8 @@ Server Actions には以下の厳格なパターンに従います：
 
 1. **アクションハンドラーファイル** (`do-entity-action.ts`):
 
-   - 定義には `createAction` 関数を使用
-   - Valibot を使用して createAction 内で直接入力検証スキーマを定義（中間変数なし）
+   - 定義には `createServerAction` 関数を使用
+   - Valibot を使用して createServerAction 内で直接入力検証スキーマを定義（中間変数なし）
    - Next.js 固有の機能を処理（revalidatePath、cookies、headers）
    - 入力パラメータの解析と検証
    - try-catch による包括的なエラー処理を実装
@@ -56,12 +56,12 @@ Server Actions には以下の厳格なパターンに従います：
 // create-user-action.ts
 "use server";
 
-import { createAction } from "@/lib/server-action";
+import { createServerAction } from "@workspace/libs/server-action/server";
 import * as v from "valibot";
 import { createUser } from "./create-user";
 import { revalidatePath } from "next/cache";
 
-export const createUserAction = createAction({
+export const createUserAction = createServerAction({
   inputSchema: v.object({
     name: v.string(),
     email: v.pipe(v.string(), v.email()),
@@ -100,32 +100,37 @@ export const createUserAction = createAction({
 ```typescript
 // 認証確認関数
 import { createClient } from "@/lib/supabase/server";
-import { fail } from "@/lib/result";
+import { fail } from "@workspace/libs/result";
 
 export async function requireAuth() {
   const supabase = await createClient();
-  const { data: { user }, error } = await supabase.auth.getUser();
-  
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
   if (error || !user) {
     return fail("認証が必要です");
   }
-  
+
   return { user };
 }
 
 // Server Action 内での使用
-export const updateUserAction = createAction({
-  inputSchema: v.object({ /* ... */ }),
+export const updateUserAction = createServerAction({
+  inputSchema: v.object({
+    /* ... */
+  }),
   handler: async (input) => {
     // 認証チェック
     const authResult = await requireAuth();
     if (!authResult.user) return authResult;
-    
+
     // 認可チェック（所有者確認）
     if (authResult.user.id !== input.userId) {
       return fail("権限がありません");
     }
-    
+
     // ビジネスロジック実行
     return await updateUser(input);
   },
@@ -158,16 +163,16 @@ export const updateUserAction = createAction({
 ```typescript
 // エラータイプの定義
 export const ErrorType = {
-  VALIDATION: "VALIDATION",      // 入力検証エラー
+  VALIDATION: "VALIDATION", // 入力検証エラー
   AUTHENTICATION: "AUTHENTICATION", // 認証エラー
-  AUTHORIZATION: "AUTHORIZATION",   // 認可エラー
-  NOT_FOUND: "NOT_FOUND",          // リソース未検出
-  CONFLICT: "CONFLICT",            // 競合エラー
-  RATE_LIMIT: "RATE_LIMIT",        // レート制限
-  INTERNAL: "INTERNAL",            // 内部エラー
+  AUTHORIZATION: "AUTHORIZATION", // 認可エラー
+  NOT_FOUND: "NOT_FOUND", // リソース未検出
+  CONFLICT: "CONFLICT", // 競合エラー
+  RATE_LIMIT: "RATE_LIMIT", // レート制限
+  INTERNAL: "INTERNAL", // 内部エラー
 } as const;
 
-type ErrorType = typeof ErrorType[keyof typeof ErrorType];
+type ErrorType = (typeof ErrorType)[keyof typeof ErrorType];
 
 // 詳細なエラー情報
 type DetailedError = {
@@ -185,9 +190,9 @@ export function handleError(error: unknown): DetailedError {
       details: error.issues,
     };
   }
-  
+
   // その他のエラータイプの処理...
-  
+
   return {
     type: ErrorType.INTERNAL,
     message: "予期しないエラーが発生しました",

@@ -1,11 +1,11 @@
-import "./globals.css";
+import "@workspace/ui/globals.css";
 
+import { Toaster } from "@workspace/ui/components/sonner";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono as GeistMono } from "next/font/google";
 import { ReactNode } from "react";
 
 import { AppName } from "@/app-info";
-import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,9 +31,9 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="ja" className="h-full">
+    <html lang="ja" className="h-full overflow-hidden">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} h-full antialiased overflow-hidden`}
       >
         {children}
         <Toaster />

@@ -1,14 +1,4 @@
-import {
-  AtSign,
-  ChevronsUpDownIcon,
-  LockKeyholeIcon,
-  User,
-} from "lucide-react";
-import Image from "next/image";
-import { redirect } from "next/navigation";
-
-import { Link } from "@/components/link";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,7 +6,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@workspace/ui/components/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -27,8 +17,18 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import { Skeleton } from "@/components/ui/skeleton";
+} from "@workspace/ui/components/sidebar";
+import { Skeleton } from "@workspace/ui/components/skeleton";
+import {
+  AtSign,
+  ChevronsUpDownIcon,
+  LockKeyholeIcon,
+  User,
+} from "lucide-react";
+import Image from "next/image";
+import { redirect } from "next/navigation";
+
+import { Link } from "@/components/link";
 import { LogoutButton } from "@/features/auth/logout/logout-button";
 import { createClient } from "@/lib/supabase/server";
 

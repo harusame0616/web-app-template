@@ -1,6 +1,3 @@
-import React, { FormEventHandler, PropsWithChildren } from "react";
-import { FieldValues, FormProviderProps } from "react-hook-form";
-
 import {
   Form as ShadcnForm,
   FormControl,
@@ -8,7 +5,9 @@ import {
   FormItem as ShadcnFormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@workspace/ui/components/form";
+import React, { FormEventHandler, PropsWithChildren } from "react";
+import { FieldValues, FormProviderProps } from "react-hook-form";
 
 import { SubmitButton } from "./submit-button";
 

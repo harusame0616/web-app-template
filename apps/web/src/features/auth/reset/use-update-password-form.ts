@@ -1,8 +1,8 @@
+import { handleServerAction } from "@workspace/libs/server-action/client";
 import { useRouter } from "next/navigation";
 import * as v from "valibot";
 
 import { passwordSchema } from "@/domains/user/schema";
-import { handleServerAction } from "@/lib/server-action/client";
 import { createClient } from "@/lib/supabase/browser";
 import { useForm } from "@/lib/use-form";
 

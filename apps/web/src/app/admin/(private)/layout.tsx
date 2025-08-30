@@ -1,9 +1,9 @@
+import { SidebarProvider } from "@workspace/ui/components/sidebar";
+import { Toaster } from "@workspace/ui/components/sonner";
 import { Metadata } from "next";
 import { PropsWithChildren, Suspense } from "react";
 
 import { AppName } from "@/app-info";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { Toaster } from "@/components/ui/sonner";
 
 import { SideMenuContainer, SideMenuPresenter } from "./side-menu";
 

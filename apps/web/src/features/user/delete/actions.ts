@@ -1,8 +1,7 @@
 "use server";
 
+import { createServerAction } from "@workspace/libs/server-action/server";
 import * as v from "valibot";
-
-import { createServerAction } from "@/lib/server-action/server";
 
 import { deleteUser } from "../delete/delete-user";
 export const deleteUserAction = createServerAction(deleteUser, {

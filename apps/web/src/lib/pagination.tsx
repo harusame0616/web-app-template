@@ -1,7 +1,5 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-
 import {
   Pagination as ShadcnPagination,
   PaginationContent,
@@ -10,7 +8,8 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
+} from "@workspace/ui/components/pagination";
+import { useSearchParams } from "next/navigation";
 
 type Props = {
   page: number;

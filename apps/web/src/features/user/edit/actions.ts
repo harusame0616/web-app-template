@@ -1,9 +1,9 @@
 "use server";
 
+import { createServerAction } from "@workspace/libs/server-action/server";
 import * as v from "valibot";
 
 import { emailSchema, nameSchema, passwordSchema } from "@/domains/user/schema";
-import { createServerAction } from "@/lib/server-action/server";
 
 import { roleSchema } from "../common/user";
 import { editUser } from "../edit/edit-user";

@@ -1,9 +1,9 @@
 "use server";
 
+import { createServerAction } from "@workspace/libs/server-action/server";
 import * as v from "valibot";
 
 import { passwordSchema } from "@/domains/user/schema";
-import { createServerAction } from "@/lib/server-action/server";
 
 import { reset } from "./reset";
 import { updatePassword } from "./update-password";

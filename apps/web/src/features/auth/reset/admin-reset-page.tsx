@@ -1,11 +1,12 @@
-import { Link } from "@/components/link";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@workspace/ui/components/card";
+
+import { Link } from "@/components/link";
 
 import { ResetForm } from "./reset-form";
 

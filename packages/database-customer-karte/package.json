@@ -1,0 +1,30 @@
+{
+  "name": "@workspace/database-customer-karte",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "db:start": "pnpm dlx supabase start",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev --skip-generate",
+    "db:reset": "prisma migrate reset --force",
+    "db:deploy": "prisma migrate deploy"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./fixtures/*": "./fixtures/*.ts"
+  },
+  "dependencies": {
+    "@date-fns/tz": "1.4.1",
+    "@prisma/client": "catalog:",
+    "@supabase/supabase-js": "catalog:",
+    "@types/node": "catalog:",
+    "dotenv": "17.2.1"
+  },
+  "devDependencies": {
+    "prisma": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  }
+}

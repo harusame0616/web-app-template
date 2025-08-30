@@ -1,10 +1,10 @@
 "use client";
 
+import { Button } from "@workspace/ui/components/button";
 import { UserPlus } from "lucide-react";
 import { useId, useState } from "react";
 
 import { Dialog } from "@/components/dialog";
-import { Button } from "@/components/ui/button";
 
 import { UserInputForm } from "../common/user-input-form";
 import { addUserAction } from "./actions";

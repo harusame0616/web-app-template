@@ -1,5 +1,5 @@
 {
-  "name": "@harusame.dev/web",
+  "name": "@workspace/web",
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@9.15.2",
@@ -18,7 +18,9 @@
     "test:e2e:list-reporter": "playwright test --reporter=list"
   },
   "dependencies": {
-    "@harusame.dev/database": "workspace:*",
+    "@workspace/ui": "workspace:*",
+    "@workspace/database": "workspace:*",
+    "@workspace/libs": "workspace:*",
     "@hookform/resolvers": "catalog:",
     "@radix-ui/react-accordion": "catalog:",
     "@radix-ui/react-alert-dialog": "catalog:",

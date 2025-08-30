@@ -1,0 +1,23 @@
+{
+  "name": "@workspace/libs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "exports": {
+    "./server-action/*": "./src/server-action/*.ts",
+    "./result": "./src/result.ts",
+    "./tailwind": "./src/tailwind.ts"
+  },
+  "dependencies": {
+    "clsx": "catalog:",
+    "tailwind-merge": "catalog:",
+    "valibot": "catalog:"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.14.0"
+}

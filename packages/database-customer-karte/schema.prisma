@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+  schemas   = ["auth", "public"]
+}
+
+enum Gender {
+  Man
+  Woman
+  Other
+
+  @@schema("public")
+}
+
+model Office {
+  // ID
+  officeId String @id
+
+  // 基本情報
+  name String @unique
+
+  // リレーション
+  customers Customer[]
+
+  // DB 調査用メタデータ
+  createdAt_ DateTime @default(now()) @ignore
+  updatedAt_ DateTime @default(now()) @updatedAt @ignore
+  Staff      Staff[]
+
+  @@schema("public")
+}
+
+model Staff {
+  // ID
+  staffId String @id
+
+  // 基本情報
+  name String
+
+  // 外部キー
+  officeId String
+  userId   String? @db.Uuid
+
+  // リレーション
+  office Office @relation(fields: [officeId], references: [officeId])
+  notes  Note[]
+
+  // DB 調査用メタデータ
+  createdAt_ DateTime @default(now()) @ignore
+  updatedAt_ DateTime @default(now()) @updatedAt @ignore
+
+  @@schema("public")
+}
+
+model Customer {
+  // ID
+  customerId String @id
+
+  // 基本情報
+  firstName     String
+  lastName      String
+  firstNameKana String
+  lastNameKana  String
+  birthday      DateTime
+  gender        Gender
+
+  // 連絡先
+  emails    String[]
+  phones    String[]
+  addresses String[]
+
+  // 他
+  remarks String
+
+  // 外部キー
+  officeId String
+
+  // リレーション
+  office Office @relation(fields: [officeId], references: [officeId])
+  notes  Note[]
+
+  // DB 調査用メタデータ
+  createdAt_ DateTime @default(now()) @ignore
+  updatedAt_ DateTime @default(now()) @updatedAt @ignore
+
+  @@schema("public")
+}
+
+model Note {
+  // ID
+  noteId String @id
+
+  // 基本情報
+  text    String
+  notedAt DateTime
+
+  // 外部キー
+  customerId String
+  staffId    String
+
+  // リレーション
+  customer Customer @relation(fields: [customerId], references: [customerId])
+  staff    Staff    @relation(fields: [staffId], references: [staffId])
+
+  // DB 調査用メタデータ
+  createdAt_ DateTime @default(now()) @ignore
+  updatedAt_ DateTime @default(now()) @updatedAt @ignore
+
+  @@schema("public")
+}

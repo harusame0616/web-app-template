@@ -1,10 +1,10 @@
 "use client";
 
+import { DropdownMenuItem } from "@workspace/ui/components/dropdown-menu";
 import { Edit } from "lucide-react";
 import { useId } from "react";
 
 import { Dialog } from "@/components/dialog";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 import { User } from "../common/user";
 import { UserInputForm } from "../common/user-input-form";
