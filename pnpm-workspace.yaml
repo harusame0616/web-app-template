@@ -58,7 +58,7 @@ catalog:
   prettier: 3.4.2
   prisma: 6.15.0
   react: 19.0.0
-  react-day-picker: 8.10.1
+  react-day-picker: 9.9.0
   react-dom: 19.0.0
   react-hook-form: 7.54.2
   sonner: 2.0.5
@@ -66,7 +66,7 @@ catalog:
   tailwindcss: 4.1.8
   tailwindcss-animate: 1.0.7
   tsx: 4.20.5
-  turbo: 2.5.4
+  turbo: 2.5.6
   typescript: ^5.9.2
   uuidv7: 1.0.2
   valibot: 1.0.0-beta.9

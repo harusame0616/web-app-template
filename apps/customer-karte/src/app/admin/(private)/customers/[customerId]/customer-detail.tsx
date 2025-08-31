@@ -63,9 +63,16 @@ type CustomerDetailPresenterProps = {
 export function CustomerDetailPresenter({
   customerDetail: customer,
 }: CustomerDetailPresenterProps) {
-  const birthday = new TZDate(customer.birthday, "Asia/Tokyo");
+  const birthday = customer.birthday
+    ? new TZDate(customer.birthday, "Asia/Tokyo")
+    : null;
   const today = new TZDate(new Date(), "Asia/Tokyo");
-  const age = differenceInYears(today, birthday);
+  const age = birthday ? differenceInYears(today, birthday) : null;
+  const formattedBirthday = birthday
+    ? format(birthday, "yyyy年MM月dd日", {
+        locale: ja,
+      })
+    : "-";
 
   return (
     <Card>
@@ -78,11 +85,9 @@ export function CustomerDetailPresenter({
               value={
                 <div>
                   <div>
-                    {format(birthday, "yyyy年MM月dd日", {
-                      locale: ja,
-                    })}
+                    {formattedBirthday}
                     <span className="text-sm text-muted-foreground mt-1">
-                      （{age}歳）
+                      （{age || "-"}歳）
                     </span>
                   </div>
                 </div>

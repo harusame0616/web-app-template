@@ -67,7 +67,7 @@ model Customer {
   lastName      String
   firstNameKana String
   lastNameKana  String
-  birthday      DateTime
+  birthday      DateTime?
   gender        Gender
 
   // 連絡先

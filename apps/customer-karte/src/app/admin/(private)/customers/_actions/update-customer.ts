@@ -1,5 +1,5 @@
 import { prisma } from "@workspace/database-customer-karte";
-import { fail, Result, succeed } from "@workspace/libs/result";
+import { Result, succeed } from "@workspace/libs/result";
 
 type UpdateCustomerParams = {
   customerId: string;
@@ -7,32 +7,37 @@ type UpdateCustomerParams = {
   lastName: string;
   firstNameKana: string;
   lastNameKana: string;
-  birthday: string;
+  birthday: string | null;
   gender: "Man" | "Woman" | "Other";
   officeId: string;
+  emails: string[];
+  phones: string[];
+  addresses: string[];
+  remarks: string;
 };
 
 export async function updateCustomer(
   params: UpdateCustomerParams,
 ): Promise<Result<{ customerId: string }>> {
-  try {
-    const customer = await prisma.customer.update({
-      where: {
-        customerId: params.customerId,
-      },
-      data: {
-        firstName: params.firstName,
-        lastName: params.lastName,
-        firstNameKana: params.firstNameKana,
-        lastNameKana: params.lastNameKana,
-        birthday: new Date(`${params.birthday}T00:00:00+09:00`),
-        gender: params.gender,
-        officeId: params.officeId,
-      },
-    });
-    return succeed({ customerId: customer.customerId });
-  } catch (error) {
-    console.error("顧客更新エラー:", error);
-    return fail("顧客情報の更新に失敗しました");
-  }
+  const customer = await prisma.customer.update({
+    where: {
+      customerId: params.customerId,
+    },
+    data: {
+      firstName: params.firstName,
+      lastName: params.lastName,
+      firstNameKana: params.firstNameKana,
+      lastNameKana: params.lastNameKana,
+      birthday: params.birthday
+        ? new Date(`${params.birthday}T00:00:00+09:00`)
+        : null,
+      gender: params.gender,
+      officeId: params.officeId,
+      emails: params.emails,
+      phones: params.phones,
+      addresses: params.addresses,
+      remarks: params.remarks,
+    },
+  });
+  return succeed({ customerId: customer.customerId });
 }

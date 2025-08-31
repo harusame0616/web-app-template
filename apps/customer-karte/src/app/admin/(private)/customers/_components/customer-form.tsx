@@ -4,14 +4,14 @@ import { TZDate } from "@date-fns/tz";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
-import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
+import { CalendarIcon, Check, ChevronsUpDown, Plus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import * as v from "valibot";
 
 import { RequiredBadge } from "@/components/required-badge";
+import { handleServerAction } from "@workspace/libs/server-action/client";
 import { Alert, AlertDescription } from "@workspace/ui/components/alert";
 import { Button } from "@workspace/ui/components/button";
 import { Calendar } from "@workspace/ui/components/calendar";
@@ -26,6 +26,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -41,13 +42,12 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from "@workspace/ui/components/radio-group";
-import { handleServerAction } from "@workspace/libs/server-action/client";
+import { Textarea } from "@workspace/ui/components/textarea";
 import { cn } from "@workspace/ui/lib/utils";
 
-import type { Office } from "../../offices/_data/office";
+import { Customer, Office } from "@workspace/database-customer-karte";
 import { createCustomerAction } from "../_actions/create-customer-action";
 import { updateCustomerAction } from "../_actions/update-customer-action";
-import { PrismaCustomer } from "@workspace/database-customer-karte";
 
 const genderOptions = [
   { value: "Man", label: "男性" },
@@ -59,41 +59,80 @@ const customerFormSchema = v.object({
   firstName: v.pipe(
     v.string(),
     v.minLength(1, "名を入力してください"),
-    v.maxLength(4096, "名は4096文字以内で入力してください"),
+    v.maxLength(24, "名は24文字以内で入力してください"),
   ),
   lastName: v.pipe(
     v.string(),
     v.minLength(1, "姓を入力してください"),
-    v.maxLength(4096, "姓は4096文字以内で入力してください"),
+    v.maxLength(24, "姓は24文字以内で入力してください"),
   ),
-  firstNameKana: v.pipe(
-    v.string(),
-    v.minLength(1, "名（カナ）を入力してください"),
-    v.maxLength(4096, "名（カナ）は4096文字以内で入力してください"),
-    v.regex(/^[ァ-ヴー]+$/, "カタカナで入力してください"),
-  ),
-  lastNameKana: v.pipe(
-    v.string(),
-    v.minLength(1, "姓（カナ）を入力してください"),
-    v.maxLength(4096, "姓（カナ）は4096文字以内で入力してください"),
-    v.regex(/^[ァ-ヴー]+$/, "カタカナで入力してください"),
-  ),
-  birthday: v.union(
-    [
-      v.pipe(v.string(), v.minLength(1, "生年月日を入力してください")),
-      v.date(),
-    ],
-    "生年月日を入力してください",
-  ),
+  firstNameKana: v.union([
+    v.literal(""),
+    v.pipe(
+      v.string(),
+      v.minLength(1, "名（カナ）を入力してください"),
+      v.maxLength(24, "名（カナ）は24文字以内で入力してください"),
+      v.regex(/^[ァ-ヴー]+$/, "カタカナで入力してください"),
+    ),
+  ]),
+  lastNameKana: v.union([
+    v.literal(""),
+    v.pipe(
+      v.string(),
+      v.minLength(1, "姓（カナ）を入力してください"),
+      v.maxLength(24, "姓（カナ）は24文字以内で入力してください"),
+      v.regex(/^[ァ-ヴー]+$/, "カタカナで入力してください"),
+    ),
+  ]),
+  birthday: v.nullable(v.union([v.pipe(v.string(), v.minLength(1)), v.date()])),
   gender: v.picklist(["Man", "Woman", "Other"], "性別を選択してください"),
   officeId: v.pipe(v.string(), v.minLength(1, "事業所を選択してください")),
+  emails: v.array(
+    v.union([
+      v.literal(""),
+      v.pipe(
+        v.string(),
+        v.minLength(1),
+        v.email("有効なメールアドレスを入力してください"),
+        v.maxLength(320, "メールアドレスは320文字以内で入力してください"),
+      ),
+    ]),
+  ),
+  phones: v.array(
+    v.union([
+      v.literal(""),
+      v.pipe(
+        v.string(),
+        v.minLength(1),
+        v.regex(
+          /^[0-9-+()\s]+$/,
+          "電話番号は数字、ハイフン、プラス記号、括弧、スペースのみ使用できます",
+        ),
+        v.maxLength(20, "電話番号は20文字以内で入力してください"),
+      ),
+    ]),
+  ),
+  addresses: v.array(
+    v.union([
+      v.literal(""),
+      v.pipe(
+        v.string(),
+        v.minLength(1),
+        v.maxLength(500, "住所は500文字以内で入力してください"),
+      ),
+    ]),
+  ),
+  remarks: v.pipe(
+    v.string(),
+    v.maxLength(5000, "備考は5000文字以内で入力してください"),
+  ),
 });
 
 type CustomerFormValues = v.InferInput<typeof customerFormSchema>;
 
 type CustomerFormProps = {
-  customer?: PrismaCustomer;
-  offices: Office[];
+  customer?: Customer;
+  offices: Pick<Office, "name" | "officeId">[];
 };
 
 export function CustomerForm({ customer, offices }: CustomerFormProps) {
@@ -108,11 +147,15 @@ export function CustomerForm({ customer, offices }: CustomerFormProps) {
       lastName: customer?.lastName || "",
       firstNameKana: customer?.firstNameKana || "",
       lastNameKana: customer?.lastNameKana || "",
-      birthday: customer
+      birthday: customer?.birthday
         ? format(new TZDate(customer.birthday, "Asia/Tokyo"), "yyyy-MM-dd")
-        : undefined,
+        : null,
       gender: customer?.gender || "Man",
       officeId: customer?.officeId || "",
+      emails: customer?.emails || [""],
+      phones: customer?.phones || [""],
+      addresses: customer?.addresses || [""],
+      remarks: customer?.remarks || "",
     },
   });
 
@@ -124,8 +167,12 @@ export function CustomerForm({ customer, offices }: CustomerFormProps) {
       birthday:
         values.birthday instanceof Date
           ? format(values.birthday, "yyyy-MM-dd")
-          : values.birthday || "",
+          : values.birthday,
       officeId: values.officeId || "",
+      emails: values.emails.filter((email) => email.trim() !== ""),
+      phones: values.phones.filter((phone) => phone.trim() !== ""),
+      addresses: values.addresses.filter((address) => address.trim() !== ""),
+      remarks: values.remarks || "",
     };
 
     const actionPromise = customer
@@ -138,7 +185,6 @@ export function CustomerForm({ customer, offices }: CustomerFormProps) {
     const result = await handleServerAction(actionPromise);
     console.log(result);
     if (result.success) {
-      toast.success(customer ? "顧客情報を更新しました" : "顧客を登録しました");
       router.push(`/admin/customers/${result.data.customerId}`);
     } else {
       setErrorMessage(
@@ -161,11 +207,11 @@ export function CustomerForm({ customer, offices }: CustomerFormProps) {
               <FormLabel>
                 姓 <RequiredBadge />
               </FormLabel>
+              <FormDescription>最大24文字</FormDescription>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="山田"
-                  className="placeholder:text-sm max-w-[200px]"
+                  className="placeholder:text-sm max-w-[200px] w-full"
                 />
               </FormControl>
               <FormMessage />
@@ -181,11 +227,11 @@ export function CustomerForm({ customer, offices }: CustomerFormProps) {
               <FormLabel>
                 名 <RequiredBadge />
               </FormLabel>
+              <FormDescription>最大24文字</FormDescription>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="太郎"
-                  className="placeholder:text-sm max-w-[200px]"
+                  className="placeholder:text-sm max-w-[200px] w-full"
                 />
               </FormControl>
               <FormMessage />
@@ -198,14 +244,12 @@ export function CustomerForm({ customer, offices }: CustomerFormProps) {
           name="lastNameKana"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                姓（カナ） <RequiredBadge />
-              </FormLabel>
+              <FormLabel>姓（カナ）</FormLabel>
+              <FormDescription>カタカナのみ、最大24文字</FormDescription>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="ヤマダ"
-                  className="placeholder:text-sm max-w-[200px]"
+                  className="placeholder:text-sm max-w-[200px] w-full"
                 />
               </FormControl>
               <FormMessage />
@@ -218,14 +262,12 @@ export function CustomerForm({ customer, offices }: CustomerFormProps) {
           name="firstNameKana"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                名（カナ） <RequiredBadge />
-              </FormLabel>
+              <FormLabel>名（カナ）</FormLabel>
+              <FormDescription>カタカナのみ、最大24文字</FormDescription>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="タロウ"
-                  className="placeholder:text-sm max-w-[200px]"
+                  className="placeholder:text-sm max-w-[200px] w-full"
                 />
               </FormControl>
               <FormMessage />
@@ -238,55 +280,73 @@ export function CustomerForm({ customer, offices }: CustomerFormProps) {
           name="birthday"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                生年月日 <RequiredBadge />
-              </FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
+              <FormLabel>生年月日</FormLabel>
+              <div className="relative max-w-[160px]">
+                <Popover>
+                  <PopoverTrigger asChild>
                     <Button
-                      variant="outline"
-                      className={cn(
-                        "w-[240px] justify-start text-left font-normal",
-                        !field.value && "text-muted-foreground",
-                      )}
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute left-0 top-0 h-full px-3 py-2 hover:bg-transparent z-10"
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {field.value ? (
-                        format(
-                          new TZDate(
-                            field.value instanceof Date
-                              ? field.value
-                              : new Date(field.value),
-                            "Asia/Tokyo",
-                          ),
-                          "yyyy年MM月dd日",
-                          { locale: ja },
-                        )
-                      ) : (
-                        <span className="text-sm">生年月日を選択</span>
-                      )}
+                      <CalendarIcon className="h-4 w-4" />
                     </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={
+                        field.value
+                          ? field.value instanceof Date
+                            ? field.value
+                            : new Date(field.value)
+                          : undefined
+                      }
+                      onSelect={(date) => {
+                        field.onChange(
+                          date ? format(date, "yyyy-MM-dd") : null,
+                        );
+                      }}
+                      disabled={(date) =>
+                        date > new Date() || date < new Date("1900-01-01")
+                      }
+                      locale={ja}
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormControl>
+                  <Input
+                    type="date"
+                    value={
                       field.value
                         ? field.value instanceof Date
-                          ? field.value
-                          : new Date(field.value)
-                        : undefined
+                          ? format(field.value, "yyyy-MM-dd")
+                          : field.value
+                        : ""
                     }
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
-                    }
-                    locale={ja}
+                    onChange={(e) => {
+                      field.onChange(e.target.value || null);
+                    }}
+                    max={format(new Date(), "yyyy-MM-dd")}
+                    min="1900-01-01"
+                    className="pl-10 pr-10 [&::-webkit-calendar-picker-indicator]:hidden"
                   />
-                </PopoverContent>
-              </Popover>
+                </FormControl>
+                {field.value && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => {
+                      form.setValue("birthday", null);
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
               <FormMessage />
             </FormItem>
           )}
@@ -343,7 +403,7 @@ export function CustomerForm({ customer, offices }: CustomerFormProps) {
                       role="combobox"
                       aria-expanded={officeOpen}
                       className={cn(
-                        "w-[400px] justify-between",
+                        "w-full max-w-[400px] justify-between",
                         !field.value && "text-muted-foreground",
                       )}
                     >
@@ -356,9 +416,9 @@ export function CustomerForm({ customer, offices }: CustomerFormProps) {
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-[400px] p-0">
+                <PopoverContent className="w-full max-w-[400px] p-0">
                   <Command>
-                    <CommandInput placeholder="事業所を検索..." />
+                    <CommandInput />
                     <CommandList>
                       <CommandEmpty>事業所が見つかりません</CommandEmpty>
                       <CommandGroup>
@@ -387,6 +447,184 @@ export function CustomerForm({ customer, offices }: CustomerFormProps) {
                   </Command>
                 </PopoverContent>
               </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="space-y-2">
+          <FormLabel>メールアドレス</FormLabel>
+          <FormDescription>有効なメール形式、最大320文字</FormDescription>
+          {form.watch("emails").map((_, index) => (
+            <FormField
+              key={index}
+              control={form.control}
+              name={`emails.${index}`}
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex gap-2">
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="email"
+                        className="flex-1 max-w-md"
+                      />
+                    </FormControl>
+                    {form.watch("emails").length > 1 && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => {
+                          const emails = form.getValues("emails");
+                          form.setValue(
+                            "emails",
+                            emails.filter((_, i) => i !== index),
+                          );
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const emails = form.getValues("emails");
+              form.setValue("emails", [...emails, ""]);
+            }}
+            className="mt-2"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            メールアドレスを追加
+          </Button>
+        </div>
+
+        <div className="space-y-2">
+          <FormLabel>電話番号</FormLabel>
+          <FormDescription>
+            数字、ハイフン、括弧、スペース使用可、最大20文字
+          </FormDescription>
+          {form.watch("phones").map((_, index) => (
+            <FormField
+              key={index}
+              control={form.control}
+              name={`phones.${index}`}
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex gap-2">
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="tel"
+                        className="flex-1 max-w-xs"
+                      />
+                    </FormControl>
+                    {form.watch("phones").length > 1 && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => {
+                          const phones = form.getValues("phones");
+                          form.setValue(
+                            "phones",
+                            phones.filter((_, i) => i !== index),
+                          );
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const phones = form.getValues("phones");
+              form.setValue("phones", [...phones, ""]);
+            }}
+            className="mt-2"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            電話番号を追加
+          </Button>
+        </div>
+
+        <div className="space-y-2">
+          <FormLabel>住所</FormLabel>
+          <FormDescription>最大500文字</FormDescription>
+          {form.watch("addresses").map((_, index) => (
+            <FormField
+              key={index}
+              control={form.control}
+              name={`addresses.${index}`}
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex gap-2">
+                    <FormControl>
+                      <Input {...field} className="flex-1 max-w-2xl" />
+                    </FormControl>
+                    {form.watch("addresses").length > 1 && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => {
+                          const addresses = form.getValues("addresses");
+                          form.setValue(
+                            "addresses",
+                            addresses.filter((_, i) => i !== index),
+                          );
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const addresses = form.getValues("addresses");
+              form.setValue("addresses", [...addresses, ""]);
+            }}
+            className="mt-2"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            住所を追加
+          </Button>
+        </div>
+
+        <FormField
+          control={form.control}
+          name="remarks"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>備考</FormLabel>
+              <FormDescription>最大5000文字</FormDescription>
+              <FormControl>
+                <Textarea {...field} className="min-h-[100px] max-w-2xl" />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
