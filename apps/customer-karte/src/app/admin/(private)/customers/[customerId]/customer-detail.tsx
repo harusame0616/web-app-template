@@ -4,10 +4,42 @@ import { ja } from "date-fns/locale";
 import { Calendar, FileText, Mail, MapPin, Phone, User } from "lucide-react";
 import React from "react";
 
+import { Gender, prisma, Prisma } from "@workspace/database-customer-karte";
 import { Card, CardContent } from "@workspace/ui/components/card";
 import { notFound } from "next/navigation";
-import { Customer, Gender } from "../customer";
-import { getCustomerDetail } from "./_data/customer";
+
+type CustomerDetail = Prisma.CustomerGetPayload<{
+  select: {
+    birthday: true;
+    gender: true;
+    addresses: true;
+    emails: true;
+    phones: true;
+    remarks: true;
+  };
+}>;
+
+export async function getCustomerDetail(
+  customerId: string,
+): Promise<CustomerDetail | null> {
+  const customerDetail = await prisma.customer.findUnique({
+    select: {
+      birthday: true,
+      gender: true,
+      emails: true,
+      phones: true,
+      addresses: true,
+      remarks: true,
+    },
+    where: { customerId },
+  });
+
+  if (!customerDetail) {
+    return null;
+  }
+
+  return customerDetail;
+}
 
 type CustomerDetailContainerProps = {
   customerId: string;
@@ -22,14 +54,14 @@ export async function CustomerDetailContainer({
     notFound();
   }
 
-  return <CustomerDetailPresenter customer={customer} />;
+  return <CustomerDetailPresenter customerDetail={customer} />;
 }
 
 type CustomerDetailPresenterProps = {
-  customer: Customer;
+  customerDetail: CustomerDetail;
 };
 export function CustomerDetailPresenter({
-  customer,
+  customerDetail: customer,
 }: CustomerDetailPresenterProps) {
   const birthday = new TZDate(customer.birthday, "Asia/Tokyo");
   const today = new TZDate(new Date(), "Asia/Tokyo");

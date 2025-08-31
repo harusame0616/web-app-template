@@ -2,7 +2,7 @@
 
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { startTransition, useState } from "react";
+import { useState, useTransition } from "react";
 
 import { Alert, AlertTitle } from "@workspace/ui/components/alert";
 import {
@@ -28,11 +28,10 @@ export function DeleteCustomerDialog({
 }: DeleteCustomerDialogProps) {
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const handleDelete = () => {
-    setIsDeleting(true);
     setErrorMessage("");
     startTransition(async () => {
       const result = await handleServerAction(
@@ -44,7 +43,6 @@ export function DeleteCustomerDialog({
         router.push("/admin/customers");
       } else {
         setErrorMessage(result.message);
-        setIsDeleting(false);
       }
     });
   };
@@ -53,7 +51,7 @@ export function DeleteCustomerDialog({
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button variant="destructive" size="sm">
-          <Trash2 className="h-4 w-4 mr-1" />
+          <Trash2 className="size-4 mr-1" />
           削除
         </Button>
       </AlertDialogTrigger>
@@ -77,10 +75,10 @@ export function DeleteCustomerDialog({
           <AlertDialogCancel>キャンセル</AlertDialogCancel>
           <Button
             onClick={handleDelete}
-            disabled={isDeleting}
+            disabled={isPending}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
           >
-            {isDeleting ? "削除中..." : "削除する"}
+            {isPending ? "削除中..." : "削除する"}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

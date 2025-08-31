@@ -1,11 +1,50 @@
 import { BuildingIcon } from "lucide-react";
 
+import { prisma, Prisma } from "@workspace/database-customer-karte";
 import { Card } from "@workspace/ui/components/card";
 import { Skeleton } from "@workspace/ui/components/skeleton";
-import { getCustomerInfo } from "./_data/customer";
-import { Customer } from "../customer";
-import { Office } from "../../offices/type";
 import { notFound } from "next/navigation";
+
+type CustomerInfo = Prisma.CustomerGetPayload<{
+  select: {
+    firstName: true;
+    lastName: true;
+    firstNameKana: true;
+    lastNameKana: true;
+    office: {
+      select: {
+        name: true;
+      };
+    };
+  };
+}>;
+
+export async function getCustomerInfo(
+  customerId: string,
+): Promise<CustomerInfo | null> {
+  const customer = await prisma.customer.findUnique({
+    select: {
+      firstName: true,
+      lastName: true,
+      firstNameKana: true,
+      lastNameKana: true,
+      office: {
+        select: {
+          name: true,
+        },
+      },
+    },
+    where: {
+      customerId,
+    },
+  });
+
+  if (!customer || !customer.office) {
+    return null;
+  }
+
+  return customer;
+}
 
 type CustomerInfoContainerProps = {
   customerId: string;
@@ -20,40 +59,36 @@ export async function CustomerInfoContainer({
     notFound();
   }
 
-  return (
-    <CustomerInfoPresenter
-      customer={customerInfo.customer}
-      office={customerInfo.office}
-    />
-  );
+  return <CustomerInfoPresenter customerInfo={customerInfo} />;
 }
 
 type CustomerInfoPresenterProps = {
-  customer: Pick<
-    Customer,
-    "firstName" | "firstNameKana" | "lastName" | "lastNameKana"
-  >;
-  office: Pick<Office, "name">;
+  customerInfo: CustomerInfo;
 };
 
 export function CustomerInfoPresenter({
-  customer,
-  office,
+  customerInfo: {
+    firstName,
+    lastName,
+    firstNameKana,
+    lastNameKana,
+    office: { name: officeName },
+  },
 }: CustomerInfoPresenterProps) {
   return (
     <Card className="bg-gradient-to-r from-gray-50 to-white p-6 shadow">
       <div className="space-y-2">
         <div className="flex items-baseline gap-4">
           <h2 className="text-xl font-semibold">
-            {customer.lastName} {customer.firstName}
+            {lastName} {firstName}
           </h2>
           <div className="flex gap-6 text-sm text-muted-foreground">
-            {customer.lastNameKana} {customer.firstNameKana}
+            {lastNameKana} {firstNameKana}
           </div>
         </div>
         <div className="flex text-muted-foreground text-sm items-center gap-2">
           <BuildingIcon className="size-4" />
-          {office.name}
+          {officeName}
         </div>
       </div>
     </Card>
