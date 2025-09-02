@@ -30,7 +30,7 @@
     "next-themes": "catalog:",
     "postcss": "catalog:",
     "react": "catalog:",
-    "react-day-picker": "catalog:",
+    "react-day-picker": "9.9.0",
     "react-dom": "catalog:",
     "react-hook-form": "catalog:",
     "sonner": "catalog:",
