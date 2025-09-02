@@ -59,7 +59,8 @@ export function NotesPresenter({
                   <UserIcon /> {note.staff.name}
                 </div>
                 <div className="flex gap-1">
-                  <CalendarIcon /> {format(new TZDate(note.notedAt, 'Asia/Tokyo'), 'yyyy-MM-dd')}
+                  <CalendarIcon />{" "}
+                  {format(new TZDate(note.notedAt, "Asia/Tokyo"), "yyyy-MM-dd")}
                 </div>
               </CardHeader>
               <CardContent>{note.text}</CardContent>
