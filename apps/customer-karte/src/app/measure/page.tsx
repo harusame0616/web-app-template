@@ -66,10 +66,12 @@ export default function MeasurePage() {
 
   if (showResults && analysisResults) {
     return (
+      <div className="overflow-auto h-full">
       <ResultDisplay
         results={analysisResults}
         onBack={() => setShowResults(false)}
       />
+      </div>
     );
   }
 
@@ -86,7 +88,7 @@ export default function MeasurePage() {
           </div>
         </div>
       )}
-      <div className="container mx-auto max-w-2xl p-4">
+      <div className="container mx-auto max-w-2xl p-4 h-full overflow-auto">
         <Card>
           <CardHeader>
             <CardTitle>体力測定結果入力</CardTitle>
