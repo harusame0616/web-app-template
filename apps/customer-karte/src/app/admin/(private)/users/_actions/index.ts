@@ -16,6 +16,7 @@ export const addUserAction = createServerAction(addUser, {
     email: emailSchema,
     password: passwordSchema,
     role: roleSchema,
+    officeId: v.pipe(v.string(), v.minLength(1)),
   }),
   revalidatePaths: ["/admin/users"],
 });
@@ -27,6 +28,7 @@ export const editUserAction = createServerAction(editUser, {
     email: emailSchema,
     password: v.union([passwordSchema, v.pipe(v.string(), v.length(0))]),
     role: roleSchema,
+    officeId: v.pipe(v.string(), v.minLength(1)),
   }),
   revalidatePath: ["/admin/users"],
 });

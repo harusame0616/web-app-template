@@ -11,7 +11,7 @@ import {
 
 import { User } from "./_data/user";
 import { Role } from "./role";
-import { UserTableActions } from "./user-table-actions";
+import { UserTableActionsContainer } from "./user-table-actions-container";
 
 type UsersTablePresenterProps =
   | {
@@ -34,6 +34,7 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
           <TableRow>
             <TableHead>名前</TableHead>
             <TableHead>メールアドレス</TableHead>
+            <TableHead>営業所</TableHead>
             <TableHead>ロール</TableHead>
             <TableHead className="w-14">操作</TableHead>
           </TableRow>
@@ -45,9 +46,11 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
                 email: "",
                 userId: "",
                 role: Role.General.value,
+                officeId: "",
+                officeName: "",
               }))
             : props.users
-          ).map(({ userId, email, name, role }, i) => (
+          ).map(({ userId, email, name, role, officeId, officeName }, i) => (
             <TableRow key={userId || i}>
               <TableCell className="py-4">
                 {props.skeleton ? (
@@ -61,6 +64,13 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
               </TableCell>
               <TableCell className="py-4">
                 {props.skeleton ? (
+                  <Skeleton className="h-5 w-24" />
+                ) : (
+                  officeName || <span className="text-muted-foreground">-</span>
+                )}
+              </TableCell>
+              <TableCell className="py-4">
+                {props.skeleton ? (
                   <Skeleton className="h-5 w-16" />
                 ) : (
                   formatRole(role)
@@ -68,7 +78,9 @@ export function UsersTablePresenter(props: UsersTablePresenterProps) {
               </TableCell>
               <TableCell className="py-4">
                 {!props.skeleton && (
-                  <UserTableActions user={{ name, email, userId, role }} />
+                  <UserTableActionsContainer
+                    user={{ name, email, userId, role, officeId, officeName }}
+                  />
                 )}
                 {props.skeleton && <Skeleton className="h-8 w-8" />}
               </TableCell>

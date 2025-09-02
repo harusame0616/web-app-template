@@ -9,6 +9,7 @@ type EditUserParams = {
   email: string;
   password: string;
   role: Role;
+  officeId: string;
 };
 export async function editUser({
   userId,
@@ -16,11 +17,12 @@ export async function editUser({
   email,
   password,
   role,
+  officeId,
 }: EditUserParams): Promise<Result> {
   const supabase = await createClient();
 
   const result = await supabase.auth.admin.updateUserById(userId, {
-    user_metadata: { name, role },
+    user_metadata: { name, role, officeId },
     password: password || undefined,
     email,
     email_confirm: true,

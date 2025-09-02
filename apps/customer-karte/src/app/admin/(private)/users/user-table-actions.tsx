@@ -17,6 +17,7 @@ import {
 import { DeleteUserDialog } from "./delete-user-dialog";
 import { EditUserDialog } from "./edit-user-dialog";
 import { Role } from "./role";
+import { Office } from "@workspace/database-customer-karte";
 
 type Props = {
   user: {
@@ -24,15 +25,18 @@ type Props = {
     email: string;
     userId: string;
     role: Role;
+    officeId: string;
   };
+  offices: Office[];
 };
 
-export function UserTableActions({ user }: Props) {
+export function UserTableActions({ user, offices }: Props) {
   const [editionUser, setEditionUser] = useState<{
     name: string;
     email: string;
     userId: string;
     role: Role;
+    officeId: string;
   }>();
   const [deletionUser, setDeletionUser] = useState<{
     name: string;
@@ -74,6 +78,7 @@ export function UserTableActions({ user }: Props) {
 
       {!!editionUser && (
         <EditUserDialog
+          offices={offices}
           title="ユーザー編集"
           onOpenChange={(open) => {
             if (!open) {

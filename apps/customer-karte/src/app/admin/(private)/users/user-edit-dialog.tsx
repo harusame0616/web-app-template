@@ -7,12 +7,16 @@ import { Dialog } from "@/components/dialog";
 import { editUserAction } from "./_actions";
 import { Role } from "./role";
 import { UserInputForm } from "./user-input-form";
+import { Office } from "@workspace/database-customer-karte";
 
 type Props = Omit<ComponentProps<typeof Dialog>, "children"> & {
   userId: string;
   name: string;
   email: string;
   role: Role;
+  officeId: string;
+  officeName?: string;
+  offices: Office[];
 };
 export function UserEditDialog({
   open,
@@ -21,6 +25,8 @@ export function UserEditDialog({
   email,
   userId,
   role,
+  officeId,
+  offices,
 }: Props) {
   const formId = useId();
 
@@ -36,7 +42,8 @@ export function UserEditDialog({
         formId={formId}
         onSuccess={() => onOpenChange(false)}
         action={(params) => editUserAction({ ...params, userId })}
-        user={{ email, name, role, userId }}
+        user={{ email, name, role, userId, officeId }}
+        offices={offices}
       />
     </Dialog>
   );

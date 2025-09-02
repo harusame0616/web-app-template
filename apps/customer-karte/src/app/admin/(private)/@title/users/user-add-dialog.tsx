@@ -6,10 +6,15 @@ import { useId, useState } from "react";
 import { Dialog } from "@/components/dialog";
 import { Button } from "@workspace/ui/components/button";
 
-import { addUserAction } from "./_actions";
-import { UserInputForm } from "./user-input-form";
+import { addUserAction } from "../../users/_actions";
+import { UserInputForm } from "../../users/user-input-form";
+import { Office } from "@workspace/database-customer-karte";
 
-export function UserAddDialog() {
+type UserAddDialogProps = {
+  offices: Office[];
+};
+
+export function UserAddDialog({ offices }: UserAddDialogProps) {
   const [open, setOpen] = useState(false);
 
   const formId = useId();
@@ -32,6 +37,7 @@ export function UserAddDialog() {
         action={addUserAction}
         formId={formId}
         onSuccess={() => setOpen(false)}
+        offices={offices}
       />
     </Dialog>
   );

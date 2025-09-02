@@ -15,7 +15,11 @@ import {
 } from "@workspace/ui/components/table";
 
 type CustomersPresenterProps = {
-  customers?: Prisma.CustomerGetPayload<{ include: { office: true } }>[];
+  customers?: Prisma.CustomerGetPayload<{
+    include: {
+      office: true;
+    };
+  }>[];
   totalPage?: number;
   page: number;
 };
@@ -31,16 +35,17 @@ export function CustomersPresenter({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[20%]">事業所</TableHead>
+              <TableHead className="w-[15%]">事業所</TableHead>
               <TableHead>名前</TableHead>
               <TableHead className="w-24">生年月日</TableHead>
-              <TableHead className="w-20">年齢</TableHead>
+              <TableHead>メールアドレス</TableHead>
+              <TableHead>電話番号</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {customers.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} className="text-center">
+                <TableCell colSpan={7} className="text-center">
                   顧客が見つかりませんでした
                 </TableCell>
               </TableRow>
@@ -59,12 +64,37 @@ export function CustomersPresenter({
                     </Link>
                   </TableCell>
                   <TableCell>
-                    {format(
-                      new TZDate(customer.birthday, "Asia/Tokyo"),
-                      "yyyy-MM-dd",
+                    {customer.birthday
+                      ? format(
+                          new TZDate(customer.birthday, "Asia/Tokyo"),
+                          "yyyy-MM-dd",
+                        )
+                      : "-"}
+                  </TableCell>
+                  <TableCell className="h-14 break-all">
+                    {customer.emails[0] ? (
+                      <a
+                        href={`mailto:${customer.emails[0]}`}
+                        className="text-blue-600 hover:underline"
+                      >
+                        {customer.emails[0]}
+                      </a>
+                    ) : (
+                      "-"
                     )}
                   </TableCell>
-                  <TableCell>（{calculateAge(customer.birthday)}）</TableCell>
+                  <TableCell className="h-14 break-all">
+                    {customer.phones[0] ? (
+                      <a
+                        href={`tel:${customer.phones[0]}`}
+                        className="text-blue-600 hover:underline"
+                      >
+                        {customer.phones[0]}
+                      </a>
+                    ) : (
+                      "-"
+                    )}
+                  </TableCell>
                 </TableRow>
               ))
             )}
@@ -87,6 +117,9 @@ export function CustomersTableSkeleton() {
               <TableHead>名前</TableHead>
               <TableHead>生年月日</TableHead>
               <TableHead>年齢</TableHead>
+              <TableHead>メールアドレス</TableHead>
+              <TableHead>電話番号</TableHead>
+              <TableHead>住所</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -103,6 +136,15 @@ export function CustomersTableSkeleton() {
                 </TableCell>
                 <TableCell>
                   <div className="h-4 w-16 animate-pulse rounded bg-gray-200" />
+                </TableCell>
+                <TableCell className="h-14">
+                  <div className="h-4 w-32 animate-pulse rounded bg-gray-200" />
+                </TableCell>
+                <TableCell className="h-14">
+                  <div className="h-4 w-28 animate-pulse rounded bg-gray-200" />
+                </TableCell>
+                <TableCell className="h-14">
+                  <div className="h-4 w-40 animate-pulse rounded bg-gray-200" />
                 </TableCell>
               </TableRow>
             ))}

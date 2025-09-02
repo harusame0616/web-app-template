@@ -4,8 +4,10 @@ import { Skeleton } from "@workspace/ui/components/skeleton";
 import { Pagination } from "@/components/pagination";
 import { CalendarIcon, UserIcon } from "lucide-react";
 import { getNotes } from "./_data/note-data";
-import { Note } from "./note";
 import { NotesSearchCondition } from "./note-search-condition";
+import { Note, Prisma } from "@workspace/database-customer-karte";
+import { format } from "date-fns";
+import { TZDate } from "@date-fns/tz";
 
 type NotesContainerProps = {
   condition: NotesSearchCondition;
@@ -15,7 +17,11 @@ export async function NotesContainer({ condition }: NotesContainerProps) {
   const { notes, totalPage } = await getNotes(condition);
 
   if (!notes?.length) {
-    return <p className="text-center p-8">接客ノートがありません</p>;
+    return (
+      <div className="space-y-4">
+        <p className="text-center p-8">接客ノートがありません</p>
+      </div>
+    );
   }
 
   return (
@@ -28,7 +34,11 @@ export async function NotesContainer({ condition }: NotesContainerProps) {
 }
 
 type NotesPresenterProps = {
-  notes: Note[];
+  notes: Prisma.NoteGetPayload<{
+    include: {
+      staff: true;
+    };
+  }>[];
   totalPage: number;
   page: number;
 };
@@ -39,17 +49,17 @@ export function NotesPresenter({
   page,
 }: NotesPresenterProps) {
   return (
-    <div>
+    <div className="space-y-4">
       <div className="space-y-6">
         {notes.map((note) => {
           return (
             <Card key={note.noteId}>
-              <CardHeader>
-                <div className="flex">
-                  <UserIcon /> 山田
+              <CardHeader className="flex gap-4">
+                <div className="flex gap-1">
+                  <UserIcon /> {note.staff.name}
                 </div>
-                <div className="flex">
-                  <CalendarIcon /> 2024.12.15.11
+                <div className="flex gap-1">
+                  <CalendarIcon /> {format(new TZDate(note.notedAt, 'Asia/Tokyo'), 'yyyy-MM-dd')}
                 </div>
               </CardHeader>
               <CardContent>{note.text}</CardContent>

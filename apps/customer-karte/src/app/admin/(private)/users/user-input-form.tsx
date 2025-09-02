@@ -10,6 +10,7 @@ import { useForm } from "@/lib/use-form";
 
 import { User } from "./_data/user";
 import { Role } from "./role";
+import { Office } from "@workspace/database-customer-karte";
 
 type UserInputFormProps = {
   formId: string;
@@ -19,14 +20,17 @@ type UserInputFormProps = {
     email: string;
     password: string;
     role: Role;
+    officeId: string;
   }) => Promise<Result>;
   user?: User;
+  offices: Office[];
 };
 export function UserInputForm({
   onSuccess,
   action,
   formId,
   user,
+  offices,
 }: UserInputFormProps) {
   const form = useForm({
     defaultValues: {
@@ -34,6 +38,7 @@ export function UserInputForm({
       email: user?.email || "",
       password: "",
       role: user?.role || Role.General.value,
+      officeId: user?.officeId || offices[0]?.officeId || "",
     },
     schema: v.object({
       name: nameSchema,
@@ -43,6 +48,7 @@ export function UserInputForm({
         ...(user ? [v.pipe(v.string(), v.length(0))] : []),
       ]),
       role: v.picklist(Object.values(Role).map((role) => role.value)),
+      officeId: v.pipe(v.string(), v.minLength(1)),
     }),
     onSubmit: async (params, setErrorMessage) => {
       setErrorMessage("");
@@ -119,6 +125,16 @@ export function UserInputForm({
         name="role"
         label="ロール"
         options={Object.values(Role)}
+      />
+      <FormSelect
+        control={form.control}
+        className="w-64"
+        name="officeId"
+        label="営業所"
+        options={offices.map((office) => ({
+          label: office.name,
+          value: office.officeId,
+        }))}
       />
     </Form>
   );

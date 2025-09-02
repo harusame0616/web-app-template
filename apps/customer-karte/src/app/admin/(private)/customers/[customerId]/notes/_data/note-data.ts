@@ -1,12 +1,18 @@
 import { Prisma, prisma } from "@workspace/database-customer-karte";
-import { Note } from "../note";
 import { NotesSearchCondition } from "../note-search-condition";
 
 export async function getNotes({
   customerId,
   page,
   keyword,
-}: NotesSearchCondition): Promise<{ notes: Note[]; totalPage: number }> {
+}: NotesSearchCondition): Promise<{
+  notes: Prisma.NoteGetPayload<{
+    include: {
+      staff: true;
+    };
+  }>[];
+  totalPage: number;
+}> {
   const perPage = 20;
   const skip = ((page || 1) - 1) * perPage;
 
