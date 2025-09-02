@@ -20,8 +20,8 @@ export function LoginForm() {
   const form = useForm<LoginFormValues>({
     resolver: valibotResolver(loginFormSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "yamada@example.com",
+      password: "demo-system",
     },
   });
 
